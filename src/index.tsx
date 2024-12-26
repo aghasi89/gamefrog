@@ -4,18 +4,23 @@ import {BrowserRouter, Route, Routes, HashRouter} from 'react-router-dom';
 import './index.css';
 import {App} from './App';
 import {Staking} from './Staking';
-
+const ENV = "development";
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
     <React.StrictMode>
-        <HashRouter>
+        {ENV==='development'?(<HashRouter>
             <Routes>
                 <Route path={'/'} element={<App/>}/>
                 <Route path={'/staking'} element={<Staking/>}/>
             </Routes>
-        </HashRouter>
+        </HashRouter>):(<BrowserRouter>
+            <Routes>
+                <Route path={'/'} element={<App/>}/>
+                <Route path={'/staking'} element={<Staking/>}/>
+            </Routes>
+        </BrowserRouter>)}
     </React.StrictMode>
 );
 
