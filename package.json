@@ -2,6 +2,7 @@
   "name": "frog",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://aghasi89.github.io/gamefrog/",
   "dependencies": {
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1",

@@ -125,6 +125,44 @@ export const SecondTitle = styled.div.withConfig({
     }
   }
 `;
+export const SecondTitleInStaking = styled.div.withConfig({
+  shouldForwardProp: prop => !['textDirection', 'column'].includes(prop)
+})<{ textDirection?: string; column?: boolean}>`
+text-align: ${({textDirection}) => textDirection ? textDirection : 'center'};
+width: 100%;
+display: flex;
+flex-direction: ${({column}) => column ? 'column' : 'row'};
+position: relative;
+z-index: 1;
+text-shadow: rgb(255, 255, 255) 3px 0px 0px, rgb(255, 255, 255) 2.83487px 0.981584px 0px, rgb(255, 255, 255) 2.35766px 1.85511px 0px, rgb(255, 255, 255) 1.62091px 2.52441px 0px, rgb(255, 255, 255) 0.705713px 2.91581px 0px, rgb(255, 255, 255) -0.287171px 2.98622px 0px, rgb(255, 255, 255) -1.24844px 2.72789px 0px, rgb(255, 255, 255) -2.07227px 2.16926px 0px, rgb(255, 255, 255) -2.66798px 1.37182px 0px, rgb(255, 255, 255) -2.96998px 0.42336px 0px, rgb(255, 255, 255) -2.94502px -0.571704px 0px, rgb(255, 255, 255) -2.59586px -1.50383px 0px, rgb(255, 255, 255) -1.96093px -2.27041px 0px, rgb(255, 255, 255) -1.11013px -2.78704px 0px, rgb(255, 255, 255) -0.137119px -2.99686px 0px, rgb(255, 255, 255) 0.850987px -2.87677px 0px, rgb(255, 255, 255) 1.74541px -2.43999px 0px, rgb(255, 255, 255) 2.44769px -1.73459px 0px, rgb(255, 255, 255) 2.88051px -0.838247px 0px;
+&>span {
+  display: inline-block;
+  font-family: var(--font-arco);
+  font-size: 64px;
+  &>div>span{
+  text-shadow: none;
+  padding: 15px 50px;
+  @media (max-width: 1024px) {
+    padding: 8px 24px;
+    }
+
+
+  }
+
+  &>span{
+  text-shadow: none;
+  padding: 15px 50px;
+  @media (max-width: 1024px) {
+    padding: 8px 24px;
+    }
+
+
+  }
+  @media (max-width: 1024px) {
+    font-size: 32px;
+  }
+}
+`;
 
 export const Title20 = styled.div`
   text-align: center;
@@ -351,6 +389,16 @@ export const Text32 = styled.p.withConfig({
   color: ${({color}) => color ? color : 'var(--color-black)'};
   text-align: center;
   margin: 0;
+`;
+export const Text48 = styled.p.withConfig({
+  shouldForwardProp: prop => !['center', 'color'].includes(prop)
+})<{ center?: boolean, color?: string }>`
+font-family: var(--font-arco);
+font-size: 48px;
+font-weight: 500;
+color: ${({color}) => color ? color : 'var(--color-black)'};
+text-align: center;
+margin: 0;
 `;
 
 export const FaqRow = styled.div.withConfig({
@@ -610,6 +658,9 @@ export const MoveText = styled.span.withConfig({
   border: 1px solid #000000;
   color: ${({color}) => color ? color : 'black'};
   font-size: ${({size}) => size ? size + 'px' : 'inherit'};
+  -webkit-box-shadow: 0px 3px 0px 0px rgba(0,0,0,1);
+  -moz-box-shadow: 0px 3px 0px 0px rgba(0,0,0,1);
+  box-shadow: 0px 3px 0px 0px rgba(0,0,0,1);
   svg {
     width: 100%; /* Адаптивная ширина для SVG */
     height: 100%;

@@ -128,6 +128,7 @@ export const HeaderMob = styled.div`
   z-index: 200;
   position: sticky;
   top: 10px;
+  margin: 0 auto;
 `
 
 export const BtnMenu = styled.div.withConfig({
