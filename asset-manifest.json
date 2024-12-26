@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/gamefrog/static/css/main.6f212212.css",
-    "main.js": "/gamefrog/static/js/main.7a0d50f4.js",
+    "main.js": "/gamefrog/static/js/main.5c04eda3.js",
     "static/media/Animation -hevc-safari.mp4": "/gamefrog/static/media/Animation -hevc-safari.c4f4e87fc907d8c302ae.mp4",
     "static/media/first-bg.png": "/gamefrog/static/media/first-bg.80c0c3f0860b72594dc7.png",
     "static/media/Animation -vp9-chrome.webm": "/gamefrog/static/media/Animation -vp9-chrome.85d22600a000a4e002d4.webm",
@@ -41,10 +41,10 @@
     "index.html": "/gamefrog/index.html",
     "static/media/x-close.svg": "/gamefrog/static/media/x-close.6f3c253571cc324b15bf4c3bed0a241b.svg",
     "main.6f212212.css.map": "/gamefrog/static/css/main.6f212212.css.map",
-    "main.7a0d50f4.js.map": "/gamefrog/static/js/main.7a0d50f4.js.map"
+    "main.5c04eda3.js.map": "/gamefrog/static/js/main.5c04eda3.js.map"
   },
   "entrypoints": [
     "static/css/main.6f212212.css",
-    "static/js/main.7a0d50f4.js"
+    "static/js/main.5c04eda3.js"
   ]
 }
