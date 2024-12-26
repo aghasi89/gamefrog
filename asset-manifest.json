@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/gamefrog/static/css/main.6f212212.css",
-    "main.js": "/gamefrog/static/js/main.16b03dbd.js",
+    "main.js": "/gamefrog/static/js/main.7a0d50f4.js",
     "static/media/Animation -hevc-safari.mp4": "/gamefrog/static/media/Animation -hevc-safari.c4f4e87fc907d8c302ae.mp4",
     "static/media/first-bg.png": "/gamefrog/static/media/first-bg.80c0c3f0860b72594dc7.png",
     "static/media/Animation -vp9-chrome.webm": "/gamefrog/static/media/Animation -vp9-chrome.85d22600a000a4e002d4.webm",
@@ -14,7 +14,6 @@
     "static/media/fourth-bg-mob.png": "/gamefrog/static/media/fourth-bg-mob.0552c6e76c3a28d70963.png",
     "static/media/final-bg.png": "/gamefrog/static/media/final-bg.a3311dd2443474f9d24e.png",
     "static/media/seven-bg.png": "/gamefrog/static/media/seven-bg.86447ddc4ea9129349f3.png",
-    "static/media/staking-bg-mob.png": "/gamefrog/static/media/staking-bg-mob.34cfcc8e17a698602e7c.png",
     "static/media/second-bg.png": "/gamefrog/static/media/second-bg.00d44c257f39bd4e971a.png",
     "static/media/faq-bg.png": "/gamefrog/static/media/faq-bg.c4ec103171aedcd7a03c.png",
     "static/media/six-bg-mob.png": "/gamefrog/static/media/six-bg-mob.f410e0da6f4f25da71e6.png",
@@ -33,17 +32,19 @@
     "static/media/arco.regular.ttf": "/gamefrog/static/media/arco.regular.82299ea0ae394bf80da9.ttf",
     "static/media/success_staked_modal.png": "/gamefrog/static/media/success_staked_modal.4fdfa47bad340f476752.png",
     "static/media/social-block.png": "/gamefrog/static/media/social-block.747f8b00d90b9224bf32.png",
+    "static/media/logo_staking.png": "/gamefrog/static/media/logo_staking.2ea75207d549c047d852.png",
     "static/media/final-form.png": "/gamefrog/static/media/final-form.4a47da0c36b9f0801285.png",
     "static/media/label.png": "/gamefrog/static/media/label.88a3422b5b48df8535f7.png",
     "static/media/final-form-mob.png": "/gamefrog/static/media/final-form-mob.42a2420cf7250c6d68d0.png",
     "static/media/chart.png": "/gamefrog/static/media/chart.b2aa49dd1e37ad7c5afc.png",
+    "static/media/coins-bg.png": "/gamefrog/static/media/coins-bg.ebbaa7efccd6cbe816f8.png",
     "index.html": "/gamefrog/index.html",
     "static/media/x-close.svg": "/gamefrog/static/media/x-close.6f3c253571cc324b15bf4c3bed0a241b.svg",
     "main.6f212212.css.map": "/gamefrog/static/css/main.6f212212.css.map",
-    "main.16b03dbd.js.map": "/gamefrog/static/js/main.16b03dbd.js.map"
+    "main.7a0d50f4.js.map": "/gamefrog/static/js/main.7a0d50f4.js.map"
   },
   "entrypoints": [
     "static/css/main.6f212212.css",
-    "static/js/main.16b03dbd.js"
+    "static/js/main.7a0d50f4.js"
   ]
 }
