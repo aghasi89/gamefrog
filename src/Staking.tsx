@@ -174,7 +174,7 @@ export const Staking = () => {
                 isPadding={true}
                 imageUrl={isDesktop ? bgPage : bgPageMob}
                 height={isDesktop ? calculateNewHeight(2340, width) : 3636}
-                style={!isDesktop ? { backgroundSize: '100% 100%', backgroundPositionY: 'bottom' } : { backgroundPositionY: 'top' }}
+                style={!isDesktop ? { backgroundPositionY: 'bottom' } : { backgroundPositionY: 'top' }}
             >
                 <Header />
                 {!isDesktop && <CloudContainer>
