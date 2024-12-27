@@ -40,7 +40,8 @@ import {
   Border,
   ButtonWithBg,
   Text20,
-  Text16Span
+  Text16Span,
+  Text48
 } from './styled';
 
 import { Header } from './components/header';
@@ -57,7 +58,10 @@ import styled from 'styled-components';
 import Lottie from 'lottie-react';
 import animationJson2 from './assets/video/Text2.json';
 import animationJson from './assets/video/Text1.json';
+import animationJsonInfoGraphic from './assets/video/Infographics.json';
 import RunText from './components/runText/RunText';
+import { Block, ColStaking, RowStaking, TextBorder } from './Staking';
+const logoText = require('./assets/images/logo_staking.png');
 
 // Изображения
 const walletBg = require('./assets/images/btn-wallet.png');
@@ -91,6 +95,8 @@ const label = require('./assets/images/label.png');
 const social = require('./assets/images/social-block.png');
 const socialX = require('./assets/images/x.png');
 const socialTG = require('./assets/images/telegram.png');
+const socialXText = require('./assets/images/x_text.png');
+const socialTGText = require('./assets/images/telegram_text.png');
 const finalForm = require('./assets/images/final-form.png');
 const finalFormMob = require('./assets/images/final-form-mob.png');
 const videoAndriod = require('./assets/video/Animation -vp9-chrome.webm');
@@ -234,7 +240,7 @@ export function App() {
         {/* --- 1-й контейнер --- */}
         <Container
           imageUrl={isDesktop ? bg : bgMob}
-          height={isDesktop ? 2142 : undefined}
+          height={isDesktop ? (2142 * width) / 1440 : undefined}
           style={{ marginTop: isDesktop ? '-115px' : '-50px', backgroundPosition: 'top center' }}
         >
           <FinalRow style={{ marginTop: isDesktop ? '30px' : (1.909 * width + 15.091) + "px", flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'start' : 'center' }}>
@@ -272,8 +278,8 @@ export function App() {
                     </Text16>
                   }
                 />
-                 <Text16Span center={false} weight='400' color='#00000080'>
-                <Text16Span> Join the presale 🙌 💎</Text16Span>, hold tight, and let our <Text16Span>AI-empowered team—and</Text16Span> the mighty <Text16Span>Gamefrog Pepe</Text16Span> — carry your investment upwards. The earlier you jump in, the stronger 💪 your position as we scale 🚀 toward <Text16Span>unprecedented heights! 💯</Text16Span>
+                <Text16Span center={false} weight='400' color='#00000080'>
+                  <Text16Span> Join the presale 🙌 💎</Text16Span>, hold tight, and let our <Text16Span>AI-empowered team—and</Text16Span> the mighty <Text16Span>Gamefrog Pepe</Text16Span> — carry your investment upwards. The earlier you jump in, the stronger 💪 your position as we scale 🚀 toward <Text16Span>unprecedented heights! 💯</Text16Span>
                 </Text16Span>
               </FaqCard>
             </FinalCol>
@@ -288,27 +294,27 @@ export function App() {
             autoPlay
             muted
             loop
-            style={{ bottom: isDesktop ? (2142 - width) / (2142 - 1024) * 600 + "px" : 'none', top: isDesktop ? 'none' : (1.048 * width + 7.088) + "px" }}
+            style={{ bottom: isDesktop ? (0.857 * width - 744.286) + "px" : 'none', top: isDesktop ? 'none' : (1.048 * width + 7.088) + "px" }}
           >
             <source src={videoAndriod} type="video/webm" />
             <source src={videoIos} type="video/mp4" />
           </Video>
           <Lottie
             style={{
-              width: (width / 1.8) + "px",
+              width: (width / (isDesktop ? 2.5 : 1.8)) + "px",
               position: "absolute",
-              bottom: isDesktop ? (2142 - width) / (2142 - 1024) * 600 + "px" : 'none',
+              bottom: isDesktop ? (0.902 * width - 808.571) + "px" : 'none',
               top: isDesktop ? 'none' : (1.549 * width - 5.701) + "px",
-              left: "15%"
+              left: isDesktop ? "25%" : "15%"
             }}
             animationData={animationJson2} loop={true} />
           <Lottie
             style={{
-              width: (width / 3) + "px",
+              width: (width / (isDesktop ? 4 : 3)) + "px",
               position: "absolute",
-              bottom: isDesktop ? (2142 - width) / (2142 - 1024) * 600 + "px" : 'none',
+              bottom: isDesktop ? (0.804 * width - 657.143) + "px" : 'none',
               top: isDesktop ? 'none' : (1.186 * width - 14.915) + "px",
-              left: "3%"
+              left: isDesktop ? "0" : "3%"
             }}
             animationData={animationJson} loop={true} />
         </Container>
@@ -316,10 +322,10 @@ export function App() {
         {/* --- 2-й контейнер --- */}
         <Container
           imageUrl={isDesktop ? bgSecond : bgSecondMob}
-          height={isDesktop ? calculateNewHeight(1056, width) : (1010*width/375)-2 }
+          height={isDesktop ? calculateNewHeight(1056, width) : (1010 * width / 375) - 2}
           style={{ marginTop: isDesktop ? '0' : '80px' }}
         >
-          <SecondTitle style={{ justifyContent: 'center', flexDirection:isDesktop ? 'row' : 'column' }}>
+          <SecondTitle style={{ justifyContent: 'center', flexDirection: isDesktop ? 'row' : 'column' }}>
             <span>Why Choose</span>
             <span>GAMEFROG?</span>
           </SecondTitle>
@@ -338,14 +344,14 @@ export function App() {
         {/* --- 3-й контейнер --- */}
         <Container
           imageUrl={isDesktop ? bgThird : bgThirdMob}
-          style={{backgroundPositionY:isDesktop ? 'top' : 'bottom'}}
-          height={isDesktop ? calculateNewHeight(1413, width) : (872*width/375)-2 }
+          style={{ backgroundPositionY: isDesktop ? 'top' : 'bottom' }}
+          height={isDesktop ? calculateNewHeight(1413, width) : (872 * width / 375) - 2}
         >
-           <SecondTitle column={true}>
+          <SecondTitle column={true}>
             <span>Join The presale:</span>
             <span>limited time, big 🤟😎 rewards!</span>
           </SecondTitle>
-          <CenterButton top={isDesktop?170:32}>
+          <CenterButton top={isDesktop ? 170 : 32}>
             {isDesktop ? (
               <InfoButton
                 imageUrl={walletBg}
@@ -368,26 +374,26 @@ export function App() {
                 </svg>
               </InfoButton>
             ) : <InfoButton
-            imageUrl={walletBg}
-            width={width*0.95}
-            style={{  color: '#000' }}
-            onClick={() => { }}
-          >
-            Secure Your Tokens Now
-            <svg
-              style={{ marginLeft: '10px' }}
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+              imageUrl={walletBg}
+              width={width * 0.95}
+              style={{ color: '#000' }}
+              onClick={() => { }}
             >
-              <path
-                d="M14.19 0H5.81C2.17 0 0 2.17 0 5.81V14.18C0 17.83 2.17 20 5.81 20H14.18C17.82 20 19.99 17.83 19.99 14.19V5.81C20 2.17 17.83 0 14.19 0ZM16.53 10.53L12.24 14.82C12.09 14.97 11.9 15.04 11.71 15.04C11.52 15.04 11.33 14.97 11.18 14.82C10.89 14.53 10.89 14.05 11.18 13.76L14.19 10.75H4C3.59 10.75 3.25 10.41 3.25 10C3.25 9.59 3.59 9.25 4 9.25H14.19L11.18 6.24C10.89 5.95 10.89 5.47 11.18 5.18C11.47 4.89 11.95 4.89 12.24 5.18L16.53 9.47C16.67 9.61 16.75 9.8 16.75 10C16.75 10.2 16.67 10.39 16.53 10.53Z"
-                fill="black"
-              />
-            </svg>
-          </InfoButton>}
+              Secure Your Tokens Now
+              <svg
+                style={{ marginLeft: '10px' }}
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.19 0H5.81C2.17 0 0 2.17 0 5.81V14.18C0 17.83 2.17 20 5.81 20H14.18C17.82 20 19.99 17.83 19.99 14.19V5.81C20 2.17 17.83 0 14.19 0ZM16.53 10.53L12.24 14.82C12.09 14.97 11.9 15.04 11.71 15.04C11.52 15.04 11.33 14.97 11.18 14.82C10.89 14.53 10.89 14.05 11.18 13.76L14.19 10.75H4C3.59 10.75 3.25 10.41 3.25 10C3.25 9.59 3.59 9.25 4 9.25H14.19L11.18 6.24C10.89 5.95 10.89 5.47 11.18 5.18C11.47 4.89 11.95 4.89 12.24 5.18L16.53 9.47C16.67 9.61 16.75 9.8 16.75 10C16.75 10.2 16.67 10.39 16.53 10.53Z"
+                  fill="black"
+                />
+              </svg>
+            </InfoButton>}
           </CenterButton>
           <CloudContainer>
             {clouds.map((cloud, index) => (
@@ -407,65 +413,65 @@ export function App() {
               </Cloud>
             ))}
           </CloudContainer>
-          <StageIcon index={0} style={{transform: 'scale(1.5)'}} />
+          <StageIcon index={0} style={{ transform: 'scale(1.5)' }} />
         </Container>
 
         {/* --- 4-й контейнер --- */}
         <Container
-        
+
           imageUrl={isDesktop ? bgFourth : bgFourthMob}
-          height={isDesktop ? calculateNewHeight(1762, width) : (1618*width/375)-2}
+          height={isDesktop ? calculateNewHeight(1762, width) : (1618 * width / 375) - 2}
         >
           <SecondTitle column={true} style={{ marginBottom: isDesktop ? '60px' : '30px', marginTop: isDesktop ? '60px' : '30px' }}>
             <span>Our mission:</span>
             <span>Financial freedom for all</span>
           </SecondTitle>
-          {isDesktop?<Text24  center={true} color='#FFF' weight={'400'} style={{width: '80%', maxWidth: '705px', margin: '0 auto', letterSpacing: '0.5px'}}>
+          {isDesktop ? <Text24 center={true} color='#FFF' weight={'400'} style={{ width: '80%', maxWidth: '705px', margin: '0 auto', letterSpacing: '0.5px' }}>
             <MoveText delay={0} duration={1} bgColor={'#20C954'} amplitude={2} >Gamefrog</MoveText>
             is more than a token — it’s a movement inspired by the
             <MoveText delay={0.2} duration={1.1} bgColor={'#FFB949'} amplitude={2}>Resilience</MoveText>
             of everyday people. Our goal is to create a  decentralized financial system that
             <MoveText delay={0.3} duration={1.2} bgColor={'#F66D3B'} amplitude={3}>Empowers</MoveText>
             everyone, regardless of background or resources
-          </Text24>:(
-            <Text20  center={true} color='#FFF' weight={'400'} style={{width: '80%', maxWidth: '705px', margin: '0 auto', letterSpacing: '0.5px'}}>
-            <MoveText delay={0} duration={1} bgColor={'#20C954'} amplitude={2} size={12} >Gamefrog</MoveText>
-            is more than a token — it’s a movement inspired by the
-            <MoveText delay={0.2} duration={1.1} bgColor={'#FFB949'} amplitude={2} size={12}>Resilience</MoveText>
-            of everyday people. Our goal is to create a  decentralized financial system that
-            <MoveText delay={0.3} duration={1.2} bgColor={'#F66D3B'} amplitude={3} size={12}>Empowers</MoveText>
-            everyone, regardless of background or resources
-          </Text20>)}
+          </Text24> : (
+            <Text20 center={true} color='#FFF' weight={'400'} style={{ width: '80%', maxWidth: '705px', margin: '0 auto', letterSpacing: '0.5px' }}>
+              <MoveText delay={0} duration={1} bgColor={'#20C954'} amplitude={2} size={12} >Gamefrog</MoveText>
+              is more than a token — it’s a movement inspired by the
+              <MoveText delay={0.2} duration={1.1} bgColor={'#FFB949'} amplitude={2} size={12}>Resilience</MoveText>
+              of everyday people. Our goal is to create a  decentralized financial system that
+              <MoveText delay={0.3} duration={1.2} bgColor={'#F66D3B'} amplitude={3} size={12}>Empowers</MoveText>
+              everyone, regardless of background or resources
+            </Text20>)}
         </Container>
 
         {/* --- 5-й контейнер --- */}
         <Container
           imageUrl={isDesktop ? bgFive : bgFiveMob}
-          height={isDesktop ? calculateNewHeight(1125, width) : (972*width/375)-2}
-          style={{backgroundPositionY:isDesktop ? 'top' : 'bottom', height: isDesktop ? calculateNewHeight(1125, width)+'px' :'fit-content', paddingBottom:isDesktop ? '0' : (430*width/375)+"px"}}
+          height={isDesktop ? calculateNewHeight(1125, width) : (972 * width / 375) - 2}
+          style={{ backgroundPositionY: isDesktop ? 'bottom' : 'bottom', height: isDesktop ? calculateNewHeight(1125, width) + 'px' : 'fit-content', paddingBottom: isDesktop ? '0' : (430 * width / 375) + "px" }}
         >
-          <SecondTitle column={false} style={{ marginBottom: '10px', justifyContent: 'center' ,flexWrap: 'wrap', gap: '7px', marginTop: isDesktop ? '60px' : '30px' }}>
+          <SecondTitle column={false} style={{ marginBottom: '10px', justifyContent: 'center', flexWrap: 'wrap', gap: '7px', marginTop: isDesktop ? '60px' : '30px' }}>
             <span>Why</span>
             <span>Gamefrog</span>
             <span>Matters</span>
           </SecondTitle>
-          <Text16  weight={"400"} center={true} color='#FFF' style={{width: '80%', maxWidth: '705px', margin: '0 auto', letterSpacing: '0.5px'}}>
-          The “David vs. Goliath” inspiration behind 
-          <MoveText delay={0} duration={1} bgColor={'#20C954'} amplitude={2} size={12} >Gamefrog</MoveText> stems from the idea of 
-          <MoveText delay={0} duration={1} bgColor={'#953BF6'} amplitude={2} size={12} color='#FFF' >💪 EmpowerING</MoveText>  everyday 
-          <MoveText delay={0} duration={1} bgColor={'#3B8CF6'} amplitude={2} size={12} color='#FFF'>Individuals</MoveText> to challenge and overcome the dominance of centralized financial systems and large institutions. Much like David’s resilience and resourcefulness in 
-          <MoveText delay={0} duration={1} bgColor={'#4E4E4E'} amplitude={2} size={12} color='#FFF'>defeating 😤</MoveText> a seemingly 
-          <MoveText delay={0} duration={1} bgColor={'#FF4949'} amplitude={2} size={12} color='#FFF'>INVINCIBLE OPPONENt 😱 </MoveText> , GAMEFROG champions the power of decentralized finance (DeFi) to level the playing field, offering fair opportunities and financial 
-          <MoveText delay={0} duration={1} bgColor={'#FFB949'} amplitude={2} size={12} >Freedom</MoveText> to everyone, regardless of their background. By embracing this ethos, GAMEFROG symbolizes the collective strength of a united 
-          <MoveText delay={0} duration={1} bgColor={'#B5DFF4'} amplitude={2} size={12} >Community ✊</MoveText> challenging the status quo and rewriting the rules of finance.
+          <Text16 weight={"400"} center={true} color='#FFF' style={{ width: '80%', maxWidth: '705px', margin: '0 auto', letterSpacing: '0.5px' }}>
+            The “David vs. Goliath” inspiration behind
+            <MoveText delay={0} duration={1} bgColor={'#20C954'} amplitude={2} size={12} >Gamefrog</MoveText> stems from the idea of
+            <MoveText delay={0} duration={1} bgColor={'#953BF6'} amplitude={2} size={12} color='#FFF' >💪 EmpowerING</MoveText>  everyday
+            <MoveText delay={0} duration={1} bgColor={'#3B8CF6'} amplitude={2} size={12} color='#FFF'>Individuals</MoveText> to challenge and overcome the dominance of centralized financial systems and large institutions. Much like David’s resilience and resourcefulness in
+            <MoveText delay={0} duration={1} bgColor={'#4E4E4E'} amplitude={2} size={12} color='#FFF'>defeating 😤</MoveText> a seemingly
+            <MoveText delay={0} duration={1} bgColor={'#FF4949'} amplitude={2} size={12} color='#FFF'>INVINCIBLE OPPONENt 😱 </MoveText> , GAMEFROG champions the power of decentralized finance (DeFi) to level the playing field, offering fair opportunities and financial
+            <MoveText delay={0} duration={1} bgColor={'#FFB949'} amplitude={2} size={12} >Freedom</MoveText> to everyone, regardless of their background. By embracing this ethos, GAMEFROG symbolizes the collective strength of a united
+            <MoveText delay={0} duration={1} bgColor={'#B5DFF4'} amplitude={2} size={12} >Community ✊</MoveText> challenging the status quo and rewriting the rules of finance.
           </Text16>
         </Container>
 
         {/* --- 6-й контейнер --- */}
         <Container
           imageUrl={isDesktop ? bgSix : bgSixMob}
-          height={isDesktop ? calculateNewHeight(922, width) : (1837*width/375)-2}
-          style={{height: 'fit-content', background:'linear-gradient(0deg, rgba(245,166,124,1) 0%, rgba(255,102,102,1) 100%)'}}
+          height={isDesktop ? calculateNewHeight(922, width) : (1837 * width / 375) - 2}
+          style={{ height: 'fit-content', background: 'linear-gradient(0deg, rgba(245,166,124,1) 0%, rgba(255,102,102,1) 100%)' }}
         >
           <Row gap="5px">
             <Column direction={'column'} size={8} sizeSm={12}>
@@ -475,25 +481,25 @@ export function App() {
               </SixTitle>
               <CardRow>
                 <CardVideo>
-                  {isDesktop?<Text24>1. Create a crypto wallet</Text24>:<Text20>1. Create a crypto wallet</Text20>}
+                  {isDesktop ? <Text24>1. Create a crypto wallet</Text24> : <Text20>1. Create a crypto wallet</Text20>}
                   <CardImgWrap>
                     <img src={card1} alt={'img'} />
                   </CardImgWrap>
                 </CardVideo>
                 <CardVideo>
-                  {isDesktop?<Text24>2. Fund your wallet with ETH/USDT</Text24>:<Text20>2. Fund your wallet with ETH/USDT</Text20>}
+                  {isDesktop ? <Text24>2. Fund your wallet with ETH/USDT</Text24> : <Text20>2. Fund your wallet with ETH/USDT</Text20>}
                   <CardImgWrap>
                     <img src={card2} alt={'img'} />
                   </CardImgWrap>
                 </CardVideo>
                 <CardVideo>
-                  {isDesktop?<Text24>3. Connect to the GAMEFROG</Text24>:<Text20>3. Connect to the GAMEFROG</Text20>}
+                  {isDesktop ? <Text24>3. Connect to the GAMEFROG</Text24> : <Text20>3. Connect to the GAMEFROG</Text20>}
                   <CardImgWrap>
                     <img src={card3} alt={'img'} />
                   </CardImgWrap>
                 </CardVideo>
                 <CardVideo>
-                  {isDesktop?<Text24>4. Buy GAMEFROG</Text24>:<Text20>4. Buy GAMEFROG</Text20>}
+                  {isDesktop ? <Text24>4. Buy GAMEFROG</Text24> : <Text20>4. Buy GAMEFROG</Text20>}
                   <CardImgWrap>
                     <img src={card4} alt={'img'} />
                   </CardImgWrap>
@@ -509,19 +515,22 @@ export function App() {
         {/* --- 7-й контейнер --- */}
         <Container
           imageUrl={isDesktop ? bgSeven : bgSevenMob}
-          height={isDesktop ? calculateNewHeight(922, width) : (910*width/375)-2}
-        />
+          height={isDesktop ? calculateNewHeight(922, width) : (910 * width / 375) - 2}
+        >
+          <Lottie style={{ width: '75%', position: "absolute", left: (0.093 * width - 9.714) + "px", top: (0.222 * width - 14.143) + "px" }} animationData={animationJsonInfoGraphic} loop={true} />
+
+        </Container>
 
         {/* --- 8-й контейнер --- */}
         <Container
           imageUrl={isDesktop ? bgNinth : bgNinthMob}
-          height={isDesktop ? calculateNewHeight(1237, width) : (1388*width/375)-2}
+          height={isDesktop ? calculateNewHeight(1237, width) : (1388 * width / 375) - 2}
         />
 
         {/* --- 9-й контейнер (FAQ) --- */}
         <Container
           imageUrl={isDesktop ? bgFaq : bgFaqMob}
-          height={isDesktop ? calculateNewHeight(1050, width) : (1221*width/375)-2}
+          height={isDesktop ? calculateNewHeight(1050, width) : (1221 * width / 375) - 2}
           style={{ backgroundSize: '100% 100%', height: 'auto', paddingBottom: '50px' }}
         >
           <FaqRow>
@@ -554,45 +563,50 @@ export function App() {
         {/* --- 10-й контейнер (финальный) --- */}
         <Container
           imageUrl={isDesktop ? bgFinal : bgFinalMob}
-          height={isDesktop ? calculateNewHeight(979, width) : (1198*width/375)-2}
-          style={!isDesktop ? { backgroundSize: '100% 100%', height: 'fit-content',
+          height={isDesktop ? calculateNewHeight(979, width) : (1198 * width / 375) - 2}
+          style={!isDesktop ? {
+            backgroundSize: '100% 100%', height: 'fit-content',
             backgroundPosition: 'bottom center',
-            paddingBottom: '50px' } : {}}
+            paddingBottom: '50px'
+          } : {}}
         >
-          <FinalRow>
-            <FinalCol>
-              <LabelFrog>
-                <img src={label} alt={'label frog'} />
-              </LabelFrog>
-              <Social style={{ marginTop: isDesktop ? '25px' : '0', marginBottom: !isDesktop ? '25px' : '0' }}>
-                <img src={social} alt={'label frog'} />
-                <SocialBtnS>
-                  <div>
-                    <Btn bgImg={socialX} />
-                  </div>
-                  <div>
-                    <Btn bgImg={socialTG} />
-                  </div>
-                </SocialBtnS>
-              </Social>
-            </FinalCol>
-            <FinalCol>
-              <FinalBlock bgImg={isDesktop ? finalForm : finalFormMob}>
-                <FinalForm>
-                  <FinalFormInput placeholder={'Name:'} />
-                  <FinalFormInput placeholder={'Email:'} />
-                  <FinalFormTextarea placeholder={'Message:'} />
-                  <FinalFormFooter>
-                    <FinalFormLink href={'mailto:support@gamefrog.io'}>
-                      support@gamefrog.io
-                    </FinalFormLink>
-                    <FinalFormBtn>Send</FinalFormBtn>
-                  </FinalFormFooter>
-                </FinalForm>
-              </FinalBlock>
-            </FinalCol>
-          </FinalRow>
+          <RowStaking>
+          <ColStaking style={{ flex: 1 }}>
+            <Block style={{ justifyContent: "center", alignItems: "center" }}><img src={logoText} style={{ width: "250px" }} /></Block>
+            <Block>
+              <Text48 center={true}>Join the</Text48>
+              <Text48 center={true} color='#20C954'><TextBorder>GAMEFROG</TextBorder></Text48>
+              <Text48 center={true}>Community</Text48>
+              <Text24 center={true}>Stay connected with our global movement:</Text24>
+              <RowStaking style={{ height: "auto" }}>
+                <div>
+                  <Text16 center={true}>Latest news and memes</Text16>
+                  <Btn style={{ width: "160px", maxWidth: "160px" }} bgImg={socialXText} />
+                </div>
+                <div>
+                  <Text16 center={true}>Instant community support</Text16>
+                  <Btn style={{ width: "183px", maxWidth: "183px" }} bgImg={socialTGText} />
+                </div>
+              </RowStaking>
+            </Block>
+          </ColStaking>
+          <Block style={isDesktop ? { flexGrow: 0, width: '550px', minWidth: "550px" } : {}}>
+            <Text48 center={true}>Have</Text48>
+            <Text48 center={true}>Questions?</Text48>
+            <Text48 center={true} color='#FC743A'><TextBorder>Get in Touch</TextBorder></Text48>
+            <FinalForm>
+              <FinalFormInput placeholder={'Name:'} />
+              <FinalFormInput placeholder={'Email:'} />
+              <FinalFormTextarea placeholder={'Message:'} />
+              <FinalFormFooter>
+                <FinalFormLink href={'mailto:support@gamefrog.io'}>support@gamefrog.io</FinalFormLink>
+                <FinalFormBtn>Send</FinalFormBtn>
+              </FinalFormFooter>
+            </FinalForm>
+          </Block>
+        </RowStaking>
         </Container>
+        
       </Wrapper>
     </Web3Context.Provider>
   );

@@ -10,8 +10,7 @@ export const Row = styled.div.withConfig({
   max-width: 1440px;
   width: 100%;
   gap: ${({ gap }) => gap || '16px'}; /* Промежуток между колонками */
-  height: calc(100% - 104px);
-  min-height: calc(1024px - 104px);
+  
   margin: 0 auto;
   
   display: flex;
