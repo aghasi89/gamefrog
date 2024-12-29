@@ -48,6 +48,7 @@ import {
   Text20,
   Text16Span,
   Text48,
+  Text32,
 } from './styled';
 
 import { Column, Row } from './utils';
@@ -94,7 +95,7 @@ const card1 = require('./assets/images/card1.png');
 const card2 = require('./assets/images/card2.png');
 const card3 = require('./assets/images/card3.png');
 const card4 = require('./assets/images/card4.png');
-
+const frogImage = require('./assets/images/frog.png');
 const videoAndriod = require('./assets/video/Animation -vp9-chrome.webm');
 const videoIos = require('./assets/video/Animation -hevc-safari.mp4');
 
@@ -121,29 +122,40 @@ export function App() {
     { top: 80, delay: 0, duration: 80 },
     { top: 240, delay: 0, duration: 20 },
   ];
-
+  let videoArg = {};
+  if(isDesktop){
+    videoArg = {
+      width
+    }
+    } else {
+    videoArg = {
+      height: 750
+    }
+    }
   return (
     <Wrapper>
       {/* Бегущая строка */}
+      {!isDesktop && <Header />}
       <RunText text="This could be the very last 🚀 1000x opportunity in history—our 🤖 AI is making it happen! — This could be the very last 🚀 1000x opportunity in history—our 🤖 AI is making it happen!" />
-
+      {isDesktop && <Header />}
       {/* Шапка */}
-      <Header />
+      
 
       {/* --- 1-й контейнер --- */}
       <Container
         imageUrl={isDesktop ? bg : bgMob}
         height={isDesktop ? (2142 * width) / 1440 : undefined}
-        style={{ marginTop: isDesktop ? '-115px' : '-50px', backgroundPosition: 'top center' }}
+        style={{ marginTop: isDesktop ? '-115px' : '-100px', backgroundPosition: 'top center'}}
       >
+        {!isDesktop && <img src={frogImage} style={{ position: "absolute", top: (0.229 * width + 62.124) + 'px', left: "calc(50% - 160.5px)", width: "321px" }} />}
         <FinalRow
           style={{
-            marginTop: isDesktop ? '30px' : (1.909 * width + 15.091) + 'px',
-            flexDirection: isDesktop ? 'row' : 'column',
+            marginTop: isDesktop ? '30px' : (0.229 * width + 274.124) + 'px',
+            flexDirection: isDesktop ? 'row' : 'column-reverse',
             alignItems: isDesktop ? 'start' : 'center',
           }}
         >
-          <FinalCol>
+          <FinalCol  style={{marginTop: isDesktop ? '0' : '508px'}}>
             <FaqCard>
               <Border
                 color="#E5E5E5"
@@ -202,6 +214,16 @@ export function App() {
           </FinalCol>
 
           <FinalCol>
+            {!isDesktop && <Block style={{ padding: "26px", marginBottom: "20px" }}>
+              <Text32 color='#FFF' center={true}><TextBorder>$GMF TOKEN</TextBorder></Text32>
+              <Text24 color='#FFF' center={true}><TextBorder>Crypto Presale</TextBorder></Text24>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <Text24 color='#000'>💎 Staking rewards: </Text24>
+                <ButtonWithBg bgColor="#C71C1C" textColor="#FFF">
+                  1591%
+                </ButtonWithBg>
+              </div>
+            </Block>}
             {/* ВАЖНО: Форма теперь только UI, логика подключения Metamask/WalletConnect/Coinbase берётся из WebProvider */}
             <Form />
           </FinalCol>
@@ -209,14 +231,15 @@ export function App() {
 
         {/* Фоновое видео */}
         <Video
-          width={width}
+          {...videoArg}
           controls={false}
           autoPlay
           muted
           loop
           style={{
             bottom: isDesktop ? (0.857 * width - 744.286) + 'px' : 'none',
-            top: isDesktop ? 'none' : (1.048 * width + 7.088) + 'px',
+            top: isDesktop ? 'none' : (0.208 * width + 952) + 'px',
+            left: isDesktop ? '0' : (0.555 * width - 568.012) + 'px',
           }}
         >
           <source src={videoAndriod} type="video/webm" />
@@ -224,7 +247,7 @@ export function App() {
         </Video>
 
         {/* Lottie-анимации */}
-        <Lottie
+        {isDesktop && <Lottie
           style={{
             width: width / (isDesktop ? 2.5 : 1.8) + 'px',
             position: 'absolute',
@@ -234,8 +257,8 @@ export function App() {
           }}
           animationData={animationJson2}
           loop={true}
-        />
-        <Lottie
+        />}
+        {isDesktop && <Lottie
           style={{
             width: width / (isDesktop ? 4 : 3) + 'px',
             position: 'absolute',
@@ -245,7 +268,7 @@ export function App() {
           }}
           animationData={animationJson}
           loop={true}
-        />
+        />}
       </Container>
 
       {/* --- 2-й контейнер --- */}
@@ -287,7 +310,7 @@ export function App() {
         </SecondTitle>
         <CenterButton top={isDesktop ? 170 : 32}>
           {isDesktop ? (
-            <InfoButton imageUrl={walletBg} style={{ textTransform: 'none' }} onClick={() => {}}>
+            <InfoButton imageUrl={walletBg} style={{ textTransform: 'none' }} onClick={() => { }}>
               Secure Your Tokens Now
               <svg
                 style={{ marginLeft: '10px' }}
@@ -308,7 +331,7 @@ export function App() {
               imageUrl={walletBg}
               width={width * 0.95}
               style={{ color: '#000' }}
-              onClick={() => {}}
+              onClick={() => { }}
             >
               Secure Your Tokens Now
               <svg
@@ -555,11 +578,11 @@ export function App() {
         style={
           !isDesktop
             ? {
-                backgroundSize: '100% 100%',
-                height: 'fit-content',
-                backgroundPosition: 'bottom center',
-                paddingBottom: '50px',
-              }
+              backgroundSize: '100% 100%',
+              height: 'fit-content',
+              backgroundPosition: 'bottom center',
+              paddingBottom: '50px',
+            }
             : {}
         }
       >
@@ -578,11 +601,11 @@ export function App() {
               <RowStaking style={{ height: 'auto', flexDirection: 'row' }}>
                 <div>
                   {isDesktop && <Text16 center={true}>Latest news and memes</Text16>}
-                  <Btn style={{ width: isDesktop?'160px':"64px", maxWidth: isDesktop?'160px':'64px' }}  bgImg={isDesktop?socialXText:socialX}/>
+                  <Btn style={{ width: isDesktop ? '160px' : "64px", maxWidth: isDesktop ? '160px' : '64px' }} bgImg={isDesktop ? socialXText : socialX} />
                 </div>
                 <div>
                   {isDesktop && <Text16 center={true}>Instant community support</Text16>}
-                  <Btn style={{ width: isDesktop?'183px':"64px", maxWidth: isDesktop?'183px':'64px' }} bgImg={isDesktop?socialTGText:socialTG} />
+                  <Btn style={{ width: isDesktop ? '183px' : "64px", maxWidth: isDesktop ? '183px' : '64px' }} bgImg={isDesktop ? socialTGText : socialTG} />
                 </div>
               </RowStaking>
             </Block>

@@ -28,6 +28,9 @@ const ModalContent = styled.div`
     gap: 20px;
     border: 1px solid #000  ;
     margin: 0 20px;
+    @media (max-width: 768px) {
+        padding: 24px 16px 16px 16px;
+    }
 `;
 
 const CloseButton = styled.button`
@@ -43,13 +46,13 @@ const CloseButton = styled.button`
 type ModalProps = {
     children: React.ReactNode;
     onClose: () => void;
-    
+    style:any
 };
 
 
-const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
+const Modal: React.FC<ModalProps> = ({ children, onClose,style }) => {
     return (
-        <ModalWrapper onClick={onClose}>
+        <ModalWrapper onClick={onClose} style = {style}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
                 <CloseButton onClick={onClose}><img src={XcloseIcon}/></CloseButton>
                 {children}

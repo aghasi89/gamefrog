@@ -10,6 +10,7 @@ const RunningText = styled.div`
     padding: 8px 0;
     width: 100%;
     font-size: 24px;
+    z-index: 150;
     &:after {
         content: '';
         display: inline-block;
@@ -30,6 +31,9 @@ const RunningText = styled.div`
             transform: translate(-100%, 0);
         }
     }
+        @media (max-width: 1024px) {
+        transform: translateY(30px);
+}
 `;
 
 

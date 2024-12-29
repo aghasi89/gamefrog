@@ -13,9 +13,7 @@ export const CalculateWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
-  @media(max-width: 1024px){
-    height: 389px;
-  }
+  
 `;
 
 export const Input = styled.div.withConfig({
@@ -48,7 +46,7 @@ export const Input = styled.div.withConfig({
     color: var(--color-black);
     height: 100%;
     width: 90%;
-    background-color: ${({bg}) => bg};
+    background-color: transparent;
 
     &::placeholder {
       color: var(--text-grey);

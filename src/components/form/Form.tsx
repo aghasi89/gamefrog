@@ -23,17 +23,22 @@ import {
   Input,
   InputText,
 } from './styled';
-import { InfoButton } from '../../styled';
+import { ButtonWithBg, InfoButton, ModalTitle, Text20 } from '../../styled';
 
 // Импорт вашего Web3Context
 import { Web3Context } from '../../WebProvider';
+import Modal from '../modal/Modal';
+import { pad } from 'viem';
+import { Row } from '../../utils';
 
 // Примеры бэкграунд-картинок
 const bg = require('../../assets/images/form-bg.png');
 const ethBg = require('../../assets/images/btn-etc.png');
 const walletBg = require('../../assets/images/btn-wallet.png');
 const buyButtonBg = require('../../assets/images/buy_btn_bg.png');
-
+const walletConnect = require('../../assets/images/wallet-connect.png');
+const metaMask = require('../../assets/images/metamask.png');
+const coinbase = require('../../assets/images/coinbase.png');
 // Интерфейс контракта (добавили buyTokens, buyAndStake и т.д.)
 interface IPresaleContract {
   buyTokens(overrides?: TransactionRequest): Promise<TransactionResponse>;
@@ -401,63 +406,40 @@ export const Form = () => {
           </InfoButton>
         </>
       )}
-
+      
       {showPopup && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-          }}
-        >
-          <div
-            style={{
-              width: '300px',
-              background: '#fff',
-              borderRadius: '8px',
-              padding: '20px',
-              textAlign: 'center',
-            }}
-          >
-            <h3>Select Wallet</h3>
-
+        <Modal style = {{gap:"16px"}} onClose={() => setShowPopup(false)}>
+            <ModalTitle color="#20C954">CONNECT WALLET</ModalTitle>
+            
+            <Text20 center={true} >If you already have a wallet, select your desired wallet from the options below. If you don’t have a wallet, download BestWallet to get started.</Text20>
             {/* Metamask */}
-            <button
-              style={{ margin: '10px 0', width: '100%' }}
+            <ButtonWithBg
+              bgColor='#EC801C'
               onClick={handleConnectMetamask}
+              style={{width:"100%",color:"#fff", fontSize:"24px"}} 
             >
-              Metamask
-            </button>
+              <Row style={{justifyContent:"space-between", alignItems:"center", padding:"9px 8px", flexDirection:"row"}} >Metamask <img src={metaMask}/></Row>
+            </ButtonWithBg>
 
             {/* WalletConnect — только если у вас есть connectWalletConnect */}
-            <button
-              style={{ margin: '10px 0', width: '100%' }}
+            <ButtonWithBg
+              bgColor='#0888F0'
               onClick={handleConnectWalletConnect}
+              style={{width:"100%",color:"#fff", fontSize:"24px"}} 
             >
-              WalletConnect
-            </button>
+              <Row style={{justifyContent:"space-between", alignItems:"center", padding:"9px 8px",flexDirection:"row"}} >Wallet Connect<img src={walletConnect}/></Row>
+            </ButtonWithBg>
 
             {/* Coinbase */}
-            <button
-              style={{ margin: '10px 0', width: '100%' }}
+            <ButtonWithBg
+            bgColor='#0052FF'
               onClick={handleConnectCoinbase}
+              style={{width:"100%",color:"#fff", fontSize:"24px"}} 
             >
-              Coinbase Wallet
-            </button>
+              <Row style={{justifyContent:"space-between", alignItems:"center", padding:"9px 8px",flexDirection:"row"}} >Coinbase Wallet <img src={coinbase}/></Row>
+            </ButtonWithBg>
 
-            {/* Cancel */}
-            <button
-              style={{ marginTop: '10px', width: '100%' }}
-              onClick={() => setShowPopup(false)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
+        </Modal>
       )}
     </FormS>
   );
