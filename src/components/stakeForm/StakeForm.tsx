@@ -6,10 +6,11 @@ const walletBg = require('../../assets/images/btn-wallet.png');
 
 type Props = {
   title: string;
-  text: string;
-  value: string;
+  text: string;         // Текст, который может содержать несколько строк (через \n)
+  value: string;        // Справа какой-то вывод (или "MAX"?)
   buttonText: string;
-  onAction?: (amount: string) => void; // ← callback для родительского компонента
+  onAction?: (amount: string) => void;         // callback при нажатии кнопки
+  onAmountChange?: (val: number) => void;      // callback при вводе числа
 };
 
 export const StakeForm = ({
@@ -17,30 +18,55 @@ export const StakeForm = ({
   buttonText,
   text,
   value,
-  onAction
+  onAction,
+  onAmountChange,
 }: Props) => {
-  const [amount, setAmount] = useState(''); // ← локальное состояние для инпута
+  const [amount, setAmount] = useState(''); // локальное состояние инпута
+
+  // Хендлер изменения поля
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    // Разрешим только цифры и точку
+    if (!/^\d*\.?\d*$/.test(val)) return;
+    setAmount(val);
+
+    // Если родитель передал onAmountChange
+    if (onAmountChange) {
+      const num = parseFloat(val) || 0;
+      onAmountChange(num);
+    }
+  };
 
   return (
     <Card>
       <Text32 center={true}>{title}</Text32>
+
+      {/* Поле ввода + кнопка MAX */}
       <Input>
         <input
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={handleChange}
           placeholder="Enter amount"
         />
         <InputBtn onClick={() => setAmount(value)}>MAX</InputBtn>
       </Input>
+
+      {/* Основной текст (может содержать переносы \n) */}
       <TextWrap>
-        <Text16 center={false}>{text}</Text16>
+        <Text16 
+          center={false} 
+          style={{ whiteSpace: 'pre-line' }} // Чтобы переносы \n отображались
+        >
+          {text}
+        </Text16>
         <Text16 center={false}>{value}</Text16>
       </TextWrap>
+
+      {/* Кнопка действия */}
       <InfoButton
         imageUrl={walletBg}
         style={{ textTransform: 'none', marginTop: '30px' }}
         onClick={() => {
-          // При клике вызываем onAction, если он передан
           if (onAction) {
             onAction(amount);
           }
