@@ -247,6 +247,7 @@ export function App() {
           {...videoArg}
           controls={false}
           autoPlay
+          playsInline
           muted
           loop
           style={{
