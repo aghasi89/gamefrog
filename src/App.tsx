@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 
 // Локальные хуки и компоненты
@@ -98,7 +98,18 @@ const card4 = require('./assets/images/card4.png');
 const frogImage = require('./assets/images/frog.png');
 const videoAndriod = require('./assets/video/Animation -vp9-chrome.webm');
 const videoIos = require('./assets/video/Animation -hevc-safari.mp4');
-
+function iOS() {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // iPad on iOS 13 detection
+  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+}
 // Функция для вычисления новой высоты в зависимости от ширины
 export function calculateNewHeight(originalHeight: number, realWidth: number) {
   const originalWidth = 1440;
@@ -122,6 +133,8 @@ export function App() {
     { top: 80, delay: 0, duration: 80 },
     { top: 240, delay: 0, duration: 20 },
   ];
+
+  const isIOS = useMemo(() => iOS(), []);
   let videoArg = {};
   if(isDesktop){
     videoArg = {
@@ -242,8 +255,8 @@ export function App() {
             left: isDesktop ? '0' : (0.555 * width - 568.012) + 'px',
           }}
         >
-          <source src={videoAndriod} type="video/webm" />
-          <source src={videoIos} type="video/mp4" />
+          {!isIOS && <source src={videoAndriod} type="video/webm" />}
+          {isIOS && <source src={videoIos} type="video/mp4" />}
         </Video>
 
         {/* Lottie-анимации */}
