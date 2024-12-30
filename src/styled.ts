@@ -438,6 +438,7 @@ export const FinalRow = styled.div`
   justify-content: space-between;
   gap: 25px;
   position: relative;
+  z-index: 10;
   margin: 0 auto;
 
   @media (max-width: 1024px) {
