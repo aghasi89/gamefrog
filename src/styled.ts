@@ -568,10 +568,12 @@ export const FinalForm = styled.div`
   }
 `;
 
-export const FinalFormInput = styled.input`
+export const FinalFormInput = styled.input.withConfig({
+    shouldForwardProp: prop => !['inValid'].includes(prop)
+    })<{ inValid?: boolean }>`
   background-color: #E8E8E8;
   border-radius: 12px;
-  border: 1px solid #000000;
+  border: 1px solid ${({inValid})=>`${inValid ? 'red' : '#000000'}`};
   font-size: 24px;
   font-family: var(--font);
   color: black;
@@ -618,7 +620,11 @@ export const FinalFormLink = styled.a`
   font-size: 20px;
   color: black;
 `;
-
+export const ErrorText = styled.span`
+  font-family: var(--font);
+  font-size: 20px;
+  color: red;
+`;
 export const FinalFormBtn = styled.button`
   border: 1px solid #000000;
   border-radius: 12px;

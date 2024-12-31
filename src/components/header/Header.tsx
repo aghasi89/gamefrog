@@ -16,7 +16,7 @@ export const Header = () => {
         return (
             <HeaderMob>
                 <Logo src={logo} alt={'logo'}/>
-                <ButtonBay>BUY NOW!</ButtonBay>
+                <ButtonBay onClick={()=>{window.location.hash="presale"}}>BUY NOW!</ButtonBay>
                 <BtnMenu imageUrl={menu} onClick={() => setShow(!show)} />
                 {show ? <Navigate>
                     {navigateConfig.map(item => <NavItem key={item.name} bgColor={item.bg}>{item.name}</NavItem>)}
@@ -42,7 +42,7 @@ export const Header = () => {
                     <NavLink to={item.path}>{item.name}</NavLink>
                 </NavItem>)}
             </Navigate>
-            <ButtonBay>BUY NOW!</ButtonBay>
+            <ButtonBay  onClick={()=>{window.location.hash="presale"}}>BUY NOW!</ButtonBay>
         </HeaderS>
     );
 };

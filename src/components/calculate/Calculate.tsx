@@ -16,7 +16,7 @@ export const Calculate = ({ column }: { column?: boolean }) => {
   // Когда пользователь вводит новое значение в поле
   const handleSumChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
-    setSum(value);
+    setSum(event.target.value);
     // Автоматически пересчитываем потенциальную прибыль
     setResult(value * APY);
   };

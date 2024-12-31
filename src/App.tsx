@@ -49,6 +49,7 @@ import {
   Text16Span,
   Text48,
   Text32,
+  ErrorText,
 } from './styled';
 
 import { Column, Row } from './utils';
@@ -123,7 +124,7 @@ export function calculateNewHeight(originalHeight: number, realWidth: number) {
 export function App() {
   const { width } = useWindowSize();
   const isDesktop = width >= 1024;
-
+  const [errorText, setErrorText] = React.useState('');
   // Параметры для анимации облаков
   const clouds = [
     { top: 0, delay: 0, duration: 30 },
@@ -387,7 +388,9 @@ export function App() {
       </Container>
 
       {/* --- 4-й контейнер --- */}
-      <Container imageUrl={isDesktop ? bgFourth : bgFourthMob} height={isDesktop ? calculateNewHeight(1762, width) : (1618 * width) / 375 - 2}>
+      <Container
+      id="community"
+       imageUrl={isDesktop ? bgFourth : bgFourthMob} height={isDesktop ? calculateNewHeight(1762, width) : (1618 * width) / 375 - 2}>
         <SecondTitle
           column={true}
           style={{ marginBottom: isDesktop ? '60px' : '30px', marginTop: isDesktop ? '60px' : '30px' }}
@@ -484,6 +487,7 @@ export function App() {
 
       {/* --- 6-й контейнер --- */}
       <Container
+        id = "presale"
         imageUrl={isDesktop ? bgSix : bgSixMob}
         height={isDesktop ? calculateNewHeight(922, width) : (1837 * width) / 375 - 2}
         style={{
@@ -532,6 +536,7 @@ export function App() {
 
       {/* --- 7-й контейнер --- */}
       <Container
+        id="tokenomics"
         imageUrl={isDesktop ? bgSeven : bgSevenMob}
         height={isDesktop ? calculateNewHeight(922, width) : (910 * width) / 375 - 2}
       >
@@ -549,7 +554,8 @@ export function App() {
       />
 
       {/* --- 9-й контейнер (FAQ) --- */}
-      <Container
+      <Container 
+        id="faq"
         imageUrl={isDesktop ? bgFaq : bgFaqMob}
         height={isDesktop ? calculateNewHeight(1050, width) : (1221 * width) / 375 - 2}
         style={{ backgroundSize: '100% 100%', height: 'auto', paddingBottom: '50px' }}
@@ -587,6 +593,7 @@ export function App() {
 
       {/* --- 10-й (финальный) контейнер --- */}
       <Container
+      id="contact"
         imageUrl={isDesktop ? bgFinal : bgFinalMob}
         height={isDesktop ? calculateNewHeight(979, width) : (1198 * width) / 375 - 2}
         style={
@@ -632,11 +639,16 @@ export function App() {
             </Text48>
             <FinalForm>
               <FinalFormInput placeholder="Name:" />
-              <FinalFormInput placeholder="Email:" />
+              <FinalFormInput inValid={true} placeholder="Email:" />
               <FinalFormTextarea placeholder="Message:" />
               <FinalFormFooter>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                {errorText && <ErrorText>{errorText}</ErrorText>}
                 <FinalFormLink href="mailto:support@gamefrog.io">support@gamefrog.io</FinalFormLink>
-                <FinalFormBtn>Send</FinalFormBtn>
+                </div>
+                <FinalFormBtn onClick={()=>{
+                  setErrorText('Error: Please enter a valid email address');
+                }}>Send</FinalFormBtn>
               </FinalFormFooter>
             </FinalForm>
           </Block>

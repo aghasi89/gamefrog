@@ -11,7 +11,7 @@ import { Staking } from './Staking';
 import { WebProvider } from './WebProvider';
 
 // Переключатель ENV (development/production)
-const ENV = "development";
+const ENV:string = "productiom";
 
 // Создаём root
 const root = ReactDOM.createRoot(
