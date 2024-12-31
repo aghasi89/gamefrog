@@ -19,7 +19,7 @@ export const Header = () => {
                 <ButtonBay onClick={()=>{window.location.hash="presale"}}>BUY NOW!</ButtonBay>
                 <BtnMenu imageUrl={menu} onClick={() => setShow(!show)} />
                 {show ? <Navigate>
-                    {navigateConfig.map(item => <NavItem key={item.name} bgColor={item.bg}>{item.name}</NavItem>)}
+                    {navigateConfig.map(item => <NavItem key={item.name} bgColor={item.bg}><a href={item.path}>{item.name}</a></NavItem>)}
                     <div style={{display: 'flex', justifyContent: 'center', gap:"10px", width: '100%', marginTop: '10px'}}>
                     <div>
                     <Btn bgImg={socialX} style={{width:'40px', height:"41px"}} />
@@ -39,7 +39,7 @@ export const Header = () => {
             <Logo src={logo} alt={'logo'}/>
             <Navigate>
                 {navigateConfig.map(item => <NavItem key={item.name} bgColor={item.bg} >
-                    <NavLink to={item.path}>{item.name}</NavLink>
+                    <a href={item.path}>{item.name}</a>
                 </NavItem>)}
             </Navigate>
             <ButtonBay  onClick={()=>{window.location.hash="presale"}}>BUY NOW!</ButtonBay>
