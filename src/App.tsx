@@ -50,6 +50,7 @@ import {
   Text48,
   Text32,
   ErrorText,
+  Wrapper2,
 } from './styled';
 
 import { Column, Row } from './utils';
@@ -162,6 +163,7 @@ export function App() {
         style={{ marginTop: isDesktop ? '-115px' : '-100px', backgroundPosition: 'top center'}}
       >
         {!isDesktop && <img src={frogImage} style={{ position: "absolute", top: (0.229 * width + 62.124) + 'px', left: "calc(50% - 160.5px)", width: "321px" }} />}
+        <Wrapper2>
         <FinalRow
           style={{
             marginTop: isDesktop ? '30px' : (0.229 * width + 274.124) + 'px',
@@ -171,6 +173,17 @@ export function App() {
         >
           <FinalCol  style={{marginTop: isDesktop ? '0' : '508px'}}>
             <FaqCard>
+            <Border
+                color="#E5E5E5"
+                width={1}
+                raduis={16}
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', marginTop: '20px' }}
+              >
+                <Text24>Current Price:</Text24>
+                <ButtonWithBg bgColor="#23BB52" textColor="#FFF">
+                  $ 0.01
+                </ButtonWithBg>
+              </Border>
               <Border
                 color="#E5E5E5"
                 width={1}
@@ -284,6 +297,7 @@ export function App() {
           animationData={animationJson}
           loop={true}
         />}
+        </Wrapper2>
       </Container>
 
       {/* --- 2-й контейнер --- */}
@@ -292,6 +306,7 @@ export function App() {
         height={isDesktop ? calculateNewHeight(1056, width) : (1010 * width) / 375 - 2}
         style={{ marginTop: isDesktop ? '0' : '80px' }}
       >
+        <Wrapper2>
         <SecondTitle
           style={{
             justifyContent: 'center',
@@ -306,11 +321,12 @@ export function App() {
             {/* Ваш контент/блоки, тексты, иконки и т.д. */}
           </Column>
           {isDesktop ? (
-            <Column alignCenter={true} size={4} sizeSm={12}>
+            <Column alignCenter={true} gap='0' size={4} sizeSm={12}>
               <Form />
             </Column>
           ) : null}
         </Row>
+        </Wrapper2>
       </Container>
 
       {/* --- 3-й контейнер --- */}
@@ -495,8 +511,9 @@ export function App() {
           background: 'linear-gradient(0deg, rgba(245,166,124,1) 0%, rgba(255,102,102,1) 100%)',
         }}
       >
+        <Wrapper2>
         <Row gap="5px">
-          <Column direction="column" size={8} sizeSm={12}>
+          <Column direction="column" size={8} sizeSm={12} gap='0'>
             <SixTitle>
               <span>hoW To participate</span>
               <span>in the presale</span>
@@ -528,10 +545,11 @@ export function App() {
               </CardVideo>
             </CardRow>
           </Column>
-          <Column alignCenter={false} size={4} sizeSm={12}>
+          <Column alignCenter={false} size={4} gap='0' sizeSm={12}>
             <Form />
           </Column>
         </Row>
+        </Wrapper2>
       </Container>
 
       {/* --- 7-й контейнер --- */}
@@ -560,6 +578,7 @@ export function App() {
         height={isDesktop ? calculateNewHeight(1050, width) : (1221 * width) / 375 - 2}
         style={{ backgroundSize: '100% 100%', height: 'auto', paddingBottom: '50px' }}
       >
+        <Wrapper2>
         <FaqRow>
           <FaqCol>
             <SixTitle style={{ marginBottom: '30px' }}>
@@ -589,6 +608,7 @@ export function App() {
             <Calculate />
           </FaqCol>
         </FaqRow>
+        </Wrapper2>
       </Container>
 
       {/* --- 10-й (финальный) контейнер --- */}
@@ -607,6 +627,7 @@ export function App() {
             : {}
         }
       >
+        <Wrapper2>
         <RowStaking>
           <ColStaking style={{ flex: 1 }}>
             <Block style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -653,6 +674,7 @@ export function App() {
             </FinalForm>
           </Block>
         </RowStaking>
+        </Wrapper2>
       </Container>
     </Wrapper>
   );

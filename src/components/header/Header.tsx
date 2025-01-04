@@ -3,7 +3,7 @@ import {HeaderS, NavItem, Navigate, Logo, ButtonBay, HeaderMob, BtnMenu} from '.
 import {navigateConfig} from './config';
 import {useWindowSize} from '../../hooks';
 import {NavLink} from 'react-router-dom';
-import { Btn } from '../../styled';
+import { Btn, Container, Wrapper2 } from '../../styled';
 const socialX = require('../../assets/images/x.png');
 const socialTG = require('../../assets/images/telegram.png');
 const logo = require('../../assets/images/logo-text.png');
@@ -35,6 +35,9 @@ export const Header = () => {
     }
 
     return (
+        <Wrapper2 style={{position: 'sticky',
+            top: '10px',
+            zIndex: 200}} >    
         <HeaderS>
             <Logo src={logo} alt={'logo'}/>
             <Navigate>
@@ -44,5 +47,6 @@ export const Header = () => {
             </Navigate>
             <ButtonBay  onClick={()=>{window.location.hash="presale"}}>BUY NOW!</ButtonBay>
         </HeaderS>
+        </Wrapper2>
     );
 };

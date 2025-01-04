@@ -17,6 +17,19 @@ export const Wrapper = styled.div`
     background-color: #FE9F8B;
   }
 `;
+export const Wrapper2 = styled.div`
+  width: 100%;
+  max-width: 1376px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 32px;
+  margin: 0 auto;
+  @media (max-width: 1024px) {
+    padding: 0 12px;
+  }
+`;  
 
 export const Container = styled.div.withConfig({
     shouldForwardProp: prop => !['imageUrl', 'height', 'isPadding'].includes(prop)
@@ -25,7 +38,7 @@ export const Container = styled.div.withConfig({
   //max-width: 1440px; 
   margin: 0 auto;
   height: ${({height}) => height?height+"px":"auto"};
-  padding: ${({isPadding}) => isPadding ? '0 20px 0' : '100px 20px 0'};
+  padding-top: ${({isPadding}) => isPadding ? '0' : '100px'};
   background-image: url(${({imageUrl}) => imageUrl});
   background-repeat: no-repeat;
   background-size: cover; //1440px;
@@ -36,7 +49,7 @@ export const Container = styled.div.withConfig({
   @media (max-width: 1024px) {
     background-size: 100%;
     background-position: top;
-    padding: 0 5px;
+    padding: 0 0;
   }
 `;
 
@@ -297,7 +310,6 @@ export const CardRow = styled.div`
   gap: 20px;
   flex-wrap: wrap;
   margin-top: 30px;
-  justify-content: center;
 `;
 
 export const CardVideo = styled.div`
@@ -410,7 +422,7 @@ export const FaqRow = styled.div.withConfig({
   display: flex;
   flex-direction: ${({column}) => column ? 'column' : 'row'};
   gap: 20px;
-
+  width: 100%;
   @media (max-width: 1024px) {
     flex-direction: column;
   }
@@ -431,7 +443,6 @@ export const FaqCol = styled.div.withConfig({
 
 
 export const FinalRow = styled.div`
-  max-width: 1376px;
   width: 100%;
   display: flex;
   flex-direction: row;
