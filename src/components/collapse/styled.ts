@@ -19,15 +19,14 @@ export const CollapseWrapper = styled.div`
 `
 
 export const CollapseButton = styled.div.withConfig({
-    shouldForwardProp: prop => !['icon'].includes(prop)
-})<{icon: string}>`
+    shouldForwardProp: prop => !['icon','isExpanded'].includes(prop)
+})<{icon: string,isExpanded?: boolean}>`
   display: flex;
   align-items: center;
   width: 100%;
   height: 104px;
   position: relative;
   padding: 20px 70px 20px 20px;
-  
   &:after {
     content: url(${({icon}) => icon});
     width: 40px;
@@ -35,6 +34,8 @@ export const CollapseButton = styled.div.withConfig({
     display: inline-block;
     position: absolute;
     right: 20px;
+    transform: ${({isExpanded}) => isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'};
+
   }
 `
 

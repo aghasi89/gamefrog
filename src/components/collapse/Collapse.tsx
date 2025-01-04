@@ -16,7 +16,7 @@ export const Collapse = ({text, btnText}: Props) => {
     const {width} = useWindowSize();
     return (
         <CollapseWrapper>
-            <CollapseButton icon={icon} onClick={() => setExpanded(!isExpanded)}>
+            <CollapseButton icon={icon} isExpanded={isExpanded} onClick={() => setExpanded(!isExpanded)}>
                 <Text24>{btnText}</Text24>
             </CollapseButton>
             {isExpanded
