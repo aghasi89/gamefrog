@@ -62,7 +62,7 @@ export const NavItem = styled.div.withConfig({
     width: 100%;
     color: inherit;
     text-decoration: none;
-    padding: 7px 12px;
+    padding: 7px 24px;
     display: inline-block;
   }
 

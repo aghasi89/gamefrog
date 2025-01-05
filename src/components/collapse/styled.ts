@@ -17,25 +17,40 @@ export const CollapseWrapper = styled.div`
     cursor: pointer;
   }
 `
-
-export const CollapseButton = styled.div.withConfig({
-    shouldForwardProp: prop => !['icon','isExpanded'].includes(prop)
-})<{icon: string,isExpanded?: boolean}>`
+export const CollapseHeader = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 104px;
-  position: relative;
-  padding: 20px 70px 20px 20px;
-  &:after {
-    content: url(${({icon}) => icon});
-    width: 40px;
-    height: 40px;
+  padding: 20px 20px 20px 20px;
+  &:hover{
+    cursor: pointer;
+  }
+`
+export const CollapseButton = styled.div.withConfig({
+    shouldForwardProp: prop => !['bgColor','isExpanded'].includes(prop)
+})<{isExpanded?: boolean,bgColor?: string}>`
+  border: 1px solid #000000;
+  box-shadow: 0 2px 2px #000000;
+  background-color: ${({bgColor}) => bgColor};
+  border-radius: 8px;
+  margin: 0 5px;
+  font-family: var(--font);
+  font-size: 20px;
+  font-weight: 500;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & span {
+    transition: transform 0.3s;
     display: inline-block;
-    position: absolute;
-    right: 20px;
-    transform: ${({isExpanded}) => isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'};
-
+    width: 24px;
+    height: 24px;
+    background-size: cover;
+    transform: ${({isExpanded}) => isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};
   }
 `
 

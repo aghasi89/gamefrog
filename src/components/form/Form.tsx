@@ -23,8 +23,7 @@ import {
   Input,
   InputText,
 } from './styled';
-import { ButtonWithBg, InfoButton, ModalTitle, Text20 } from '../../styled';
-
+import { B, ButtonWithBg, InfoButton, ModalTitle, Text20 } from '../../styled';
 // Импорт вашего Web3Context
 import { Web3Context } from '../../WebProvider';
 import Modal from '../modal/Modal';
@@ -39,6 +38,8 @@ const buyButtonBg = require('../../assets/images/buy_btn_bg.png');
 const walletConnect = require('../../assets/images/wallet-connect.png');
 const metaMask = require('../../assets/images/metamask.png');
 const coinbase = require('../../assets/images/coinbase.png');
+const etherIcon = require('../../assets/images/ethereum.png');
+
 // Интерфейс контракта (добавили buyTokens, buyAndStake и т.д.)
 interface IPresaleContract {
   buyTokens(overrides?: TransactionRequest): Promise<TransactionResponse>;
@@ -298,7 +299,7 @@ export const Form = () => {
   // ================================
   // Рендер
   return (
-    <FormS imageUrl={bg}>
+    <FormS>
       <FormTitle>Grab it now before the cost goes up!</FormTitle>
 
       {errorMsg && (
@@ -342,8 +343,8 @@ export const Form = () => {
         Current Price: {currentPriceRaw ? `$${formatUsd(currentPriceRaw)}` : '...'}
       </Text24>
 
-      <InfoButton imageUrl={ethBg}>
-        {fundsRaised ? `${formatEth(fundsRaised)} ETH` : 'Loading...'}
+      <InfoButton bgColor='#000'>
+        {fundsRaised ? <>{`${formatEth(fundsRaised)} `}<img width={24} style={{margin:"0 10px"}}  src={etherIcon}/>{` ETH`}</> : 'Loading...'}
       </InfoButton>
 
       {/* Поля ввода ETH / GMF */}
@@ -353,10 +354,11 @@ export const Form = () => {
           <Input>
             <input
               type="text"
-              placeholder="Enter ETH amount"
+              placeholder="Enter ETH"
               value={ethAmount}
               onChange={(e) => handleChangeEth(e.target.value)}
             />
+            <InputText><img width={24}  src={etherIcon}/></InputText>
           </Input>
         </BoxItem>
         <BoxItem>
@@ -364,7 +366,7 @@ export const Form = () => {
           <Input>
             <input
               type="text"
-              placeholder="Enter GMF amount"
+              placeholder="Enter GMF"
               value={gmfAmount}
               onChange={(e) => handleChangeGMF(e.target.value)}
             />
@@ -376,33 +378,33 @@ export const Form = () => {
       {/* Если нет кошелька – кнопка "Connect Wallet" */}
       {!walletAddress ? (
         <InfoButton
-          imageUrl={walletBg}
+          bgColor='#20C954'
           style={{ textTransform: 'none' }}
           onClick={handleOpenPopup}
           color="#000"
         >
-          Connect Wallet
+          <B>Connect Wallet</B>
         </InfoButton>
       ) : (
         // Если уже подключён – Buy / Buy & Stake
         <>
           <InfoButton
-            imageUrl={walletBg}
+            bgColor='#20C954'
             style={{ textTransform: 'none', marginTop: '20px' }}
             onClick={handleBuyTokens}
             color="#FFF"
           >
-            Buy ({walletAddress.slice(0, 6)}...{walletAddress.slice(-4)})
+            <B>Buy ({walletAddress.slice(0, 6)}...{walletAddress.slice(-4)})</B>
           </InfoButton>
 
           <InfoButton
             height={54}
             width={387}
-            imageUrl={buyButtonBg}
+            bgColor='#FE8903'
             style={{ textTransform: 'none', marginTop: '20px' }}
             onClick={handleBuyAndStake}
           >
-            <Text24>Buy & Stake!</Text24>
+            <Text24><B>Buy & Stake!</B></Text24>
           </InfoButton>
         </>
       )}

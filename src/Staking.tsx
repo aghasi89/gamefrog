@@ -425,7 +425,7 @@ export const Staking = () => {
               </Text48>
               <Text48 center={true}>Community</Text48>
               <Text24 center={true}>Stay connected with our global movement:</Text24>
-              <RowStaking style={{ height: 'auto' }}>
+              <RowStaking style={{ height: 'auto',flexDirection: 'row' }}>
               <div>
                   {isDesktop && <Text16 center={true}>Latest news and memes</Text16>}
                   <Btn style={{ width: isDesktop?'160px':"64px", maxWidth: isDesktop?'160px':'64px' }}  bgImg={isDesktop?socialXText:socialX}/>
@@ -462,7 +462,7 @@ export const Staking = () => {
           <img height={179} src={SuccessStakedImage} alt="success" />
           <ModalTitle color="#20C954">Successfully STAKED</ModalTitle>
           <InfoButton
-            imageUrl={walletBg}
+            bgColor='#20C954'
             style={{ textTransform: 'none', marginTop: '30px' }}
             onClick={() => setIsOpenModal(false)}
           >

@@ -261,23 +261,23 @@ export const CenterButton = styled.div.withConfig({
 `;
 
 export const InfoButton = styled.div.withConfig({
-    shouldForwardProp: prop => !['imageUrl','width'].includes(prop)
-})<{ imageUrl: string, width?: number, height?: number }>`
+    shouldForwardProp: prop => !['width','height','bgColor'].includes(prop)
+})<{ bgColor: string, width?: number, height?: number }>`
   width: ${({width}) =>width?width+"px":'100%'};
   max-width: ${({width}) =>width?"95%":'450px'};
   height: ${({height}) => height ? height + 'px' : '62px'};
   padding: 10px 20px;
-  background-image: url(${({imageUrl}) => imageUrl});
+  border: 1px solid #000000;
+  box-shadow: 0 2px 2px #000000;
+  background-color: ${({bgColor}) => bgColor};
   background-repeat: no-repeat;
   background-size: ${({width}) =>width?"95%":'100%'};
   background-position: center center;
   transition: 0.3s;
   transform: scale(1);
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 24px;
   font-weight: 500;
   font-family: var(--font);
@@ -348,6 +348,10 @@ export const Text14 = styled.p.withConfig({
   text-align: ${({center}) => center ? 'center' : 'left'};
   margin: 3px 0;
 `;
+
+export const B  = styled.b`
+  color: var(--color-black);
+  `
 
 export const Text16 = styled.p.withConfig({
     shouldForwardProp: prop => !['center', 'color','weight'].includes(prop)

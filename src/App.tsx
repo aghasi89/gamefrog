@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 // Локальные хуки и компоненты
@@ -51,6 +51,7 @@ import {
   Text32,
   ErrorText,
   Wrapper2,
+  B,
 } from './styled';
 
 import { Column, Row } from './utils';
@@ -109,8 +110,8 @@ function iOS() {
     'iPhone',
     'iPod'
   ].includes(navigator.platform)
-  // iPad on iOS 13 detection
-  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+    // iPad on iOS 13 detection
+    || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 }
 // Функция для вычисления новой высоты в зависимости от ширины
 export function calculateNewHeight(originalHeight: number, realWidth: number) {
@@ -138,15 +139,16 @@ export function App() {
 
   const isIOS = useMemo(() => iOS(), []);
   let videoArg = {};
-  if(isDesktop){
+  if (isDesktop) {
     videoArg = {
       width
     }
-    } else {
+  } else {
     videoArg = {
       height: 750
     }
-    }
+  }
+  const [headerCollapsed, setHeaderCollapsed] = useState(-1);
   return (
     <Wrapper>
       {/* Бегущая строка */}
@@ -154,149 +156,176 @@ export function App() {
       <RunText text="This could be the very last 🚀 1000x opportunity in history—our 🤖 AI is making it happen! — This could be the very last 🚀 1000x opportunity in history—our 🤖 AI is making it happen!" />
       {isDesktop && <Header />}
       {/* Шапка */}
-      
+
 
       {/* --- 1-й контейнер --- */}
       <Container
         imageUrl={isDesktop ? bg : bgMob}
         height={isDesktop ? (2142 * width) / 1440 : undefined}
-        style={{ marginTop: isDesktop ? '-115px' : '-100px', backgroundPosition: 'top center'}}
+        style={{ marginTop: isDesktop ? '-115px' : '-100px', backgroundPosition: 'top center' }}
       >
         {!isDesktop && <img src={frogImage} style={{ position: "absolute", top: (0.229 * width + 62.124) + 'px', left: "calc(50% - 160.5px)", width: "321px" }} />}
         <Wrapper2>
-        <FinalRow
-          style={{
-            marginTop: isDesktop ? '30px' : (0.229 * width + 274.124) + 'px',
-            flexDirection: isDesktop ? 'row' : 'column-reverse',
-            alignItems: isDesktop ? 'start' : 'center',
-          }}
-        >
-          <FinalCol  style={{marginTop: isDesktop ? '0' : '508px'}}>
-            <FaqCard>
-            <Border
-                color="#E5E5E5"
-                width={1}
-                raduis={16}
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', marginTop: '20px' }}
-              >
-                <Text24>Current Price:</Text24>
-                <ButtonWithBg bgColor="#23BB52" textColor="#FFF">
-                  $ 0.01
-                </ButtonWithBg>
-              </Border>
-              <Border
-                color="#E5E5E5"
-                width={1}
-                raduis={16}
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', marginTop: '20px' }}
-              >
-                <Text24>🚀 Launch price: </Text24>
-                <ButtonWithBg bgColor="#23BB52" textColor="#FFF">
-                  $ 0.01
-                </ButtonWithBg>
-              </Border>
-              <Border
-                color="#E5E5E5"
-                width={1}
-                raduis={16}
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', marginTop: '20px' }}
-              >
-                <Text24>💎 Staking rewards:</Text24>
-                <ButtonWithBg bgColor="#C71C1C" textColor="#FFF">
-                  1425%
-                </ButtonWithBg>
-              </Border>
-              <Collapse
-                btnText="How It Works?"
-                text={
-                  <Text16 color="var(--text-grey)" center={false}>
-                    Presale participants lock in incredibly low entry prices ...
-                  </Text16>
-                }
-              />
-              <Collapse
-                btnText="Stability Backed by Strategy"
-                text={
-                  <Text16 color="var(--text-grey)" center={false}>
-                    Your investment isn’t left floating ...
-                  </Text16>
-                }
-              />
-              <Collapse
-                btnText="Why Buy Now?"
-                text={
-                  <Text16 color="var(--text-grey)" center={false}>
-                    • Unbeatable Entry: ...
-                  </Text16>
-                }
-              />
-              <Text16Span center={false} weight="400" color="#00000080">
-                <Text16Span> Join the presale 🙌 💎</Text16Span>, hold tight, and let our{' '}
-                <Text16Span>AI-empowered team—and</Text16Span> the mighty{' '}
-                <Text16Span>Gamefrog Pepe</Text16Span> — carry your investment upwards. The earlier
-                you jump in, the stronger <Text16Span>💪 your position</Text16Span> as we scale 🚀
-                toward <Text16Span>unprecedented heights! 💯</Text16Span>
-              </Text16Span>
-            </FaqCard>
-          </FinalCol>
+          <FinalRow
+            style={{
+              marginTop: isDesktop ? '30px' : (0.229 * width + 274.124) + 'px',
+              flexDirection: isDesktop ? 'row' : 'column-reverse',
+              alignItems: isDesktop ? 'start' : 'center',
+            }}
+          >
+            <FinalCol style={{ marginTop: isDesktop ? '0' : '508px' }}>
+              <FaqCard>
+                <Border
+                  color="#E5E5E5"
+                  width={1}
+                  raduis={16}
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', marginTop: '20px' }}
+                >
+                  <Text24>🙌 Current price</Text24>
+                  <ButtonWithBg bgColor="#23BB52" textColor="#FFF">
+                    $ 0.01
+                  </ButtonWithBg>
+                </Border>
+                <Border
+                  color="#E5E5E5"
+                  width={1}
+                  raduis={16}
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', marginTop: '20px' }}
+                >
+                  <Text24>🚀 Launch price: </Text24>
+                  <ButtonWithBg bgColor="#23BB52" textColor="#FFF">
+                    $ 0.01
+                  </ButtonWithBg>
+                </Border>
+                <Border
+                  color="#E5E5E5"
+                  width={1}
+                  raduis={16}
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', marginTop: '20px' }}
+                >
+                  <Text24>💎 Staking rewards:</Text24>
+                  <ButtonWithBg bgColor="#C71C1C" textColor="#FFF">
+                    1425%
+                  </ButtonWithBg>
+                </Border>
+                <Collapse
+                  open={headerCollapsed === 0}
+                  onPress={(b: boolean) => {
+                    if (b) {
+                      setHeaderCollapsed(0);
+                    } else {
+                      setHeaderCollapsed(-1);
+                    }
 
-          <FinalCol>
-            {!isDesktop && <Block style={{ padding: "26px", marginBottom: "20px" }}>
-              <Text32 color='#FFF' center={true}><TextBorder>$GMF TOKEN</TextBorder></Text32>
-              <Text24 color='#FFF' center={true}><TextBorder>Crypto Presale</TextBorder></Text24>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                <Text24 color='#000'>💎 Staking rewards: </Text24>
-                <ButtonWithBg bgColor="#C71C1C" textColor="#FFF">
-                  1591%
-                </ButtonWithBg>
-              </div>
-            </Block>}
-            {/* ВАЖНО: Форма теперь только UI, логика подключения Metamask/WalletConnect/Coinbase берётся из WebProvider */}
-            <Form />
-          </FinalCol>
-        </FinalRow>
+                  }
+                  }
+                  btnText="How It Works?"
+                  text={
+                    <Text16 color="var(--text-grey)" center={false}>
+                      Presale participants lock in incredibly low entry prices. Once we go live at $0.10, our AI-driven champion—<B>Gamefrog Pepe</B>—jumps into action. He symbolizes the strength of our approach and the proactive use of presale funds. As new buyers join at $0.10 and beyond, those early supporters already hold a powerful advantage, positioning themselves for exponential returns.
+                    </Text16>
+                  }
+                />
+                <Collapse
+                  btnText="Stability Backed by Strategy"
+                  open={headerCollapsed === 1}
+                  onPress={(b: boolean) => {
+                    if (b) {
+                      setHeaderCollapsed(1);
+                    } else {
+                      setHeaderCollapsed(-1);
+                    }
 
-        {/* Фоновое видео */}
-        <Video
-          {...videoArg}
-          controls={false}
-          autoPlay
-          playsInline
-          muted
-          loop
-          style={{
-            bottom: isDesktop ? (0.857 * width - 744.286) + 'px' : 'none',
-            top: isDesktop ? 'none' : (0.208 * width + 952) + 'px',
-            left: isDesktop ? '0' : (0.555 * width - 568.012) + 'px',
-          }}
-        >
-          {!isIOS && <source src={videoAndriod} type="video/webm" />}
-          {isIOS && <source src={videoIos} type="video/mp4" />}
-        </Video>
+                  }}
+                  text={
+                    <Text16 color="var(--text-grey)" center={false}>
+                      Your investment isn’t left floating in the market’s ebb and flow. Part of the presale funds are strategically allocated to stabilize and support the token’s value. Gamefrog Pepe’s digital “muscles” represent the intelligent market-making—guided by our cutting-edge Gamefrog-Ki —working tirelessly to keep the chart’s upward trajectory steady, fending off downturns, and building strong momentum.
+                    </Text16>
+                  }
+                />
+                <Collapse
+                  btnText="Why Buy Now?"
+                  open={headerCollapsed === 2}
+                  onPress={(b: boolean) => {
+                    if (b) {
+                      setHeaderCollapsed(2);
+                    } else {
+                      setHeaderCollapsed(-1);
+                    }
+                  }}
+                  text={
+                    <Text16 color="var(--text-grey)" center={false}>
+                      <B>• Unbeatable Entry:</B> Secure your tokens at a fraction of the postlaunch price. <br /><B>• Strategic Support:</B> Benefit from our intelligent stabilization efforts and watch the chart climb. <br /><B>• Long-Term Potential:</B> Our ambitious target of $10 isn’t just a dream—it’s a goal backed by robust technology and presale-driven liquidity.
+                    </Text16>
+                  }
+                />
+                <Text16Span center={false} weight="400" color="#00000080">
+                  <Text16Span> Join the presale 🙌 💎</Text16Span>, hold tight, and let our{' '}
+                  <Text16Span>AI-empowered team—and</Text16Span> the mighty{' '}
+                  <Text16Span>Gamefrog Pepe</Text16Span> — carry your investment upwards. The earlier
+                  you jump in, the stronger <Text16Span>💪 your position</Text16Span> as we scale 🚀
+                  toward <Text16Span>unprecedented heights! 💯</Text16Span>
+                </Text16Span>
+              </FaqCard>
+            </FinalCol>
 
-        {/* Lottie-анимации */}
-        {isDesktop && <Lottie
-          style={{
-            width: width / (isDesktop ? 2.5 : 1.8) + 'px',
-            position: 'absolute',
-            bottom: isDesktop ? (0.902 * width - 808.571) + 'px' : 'none',
-            top: isDesktop ? 'none' : (1.549 * width - 5.701) + 'px',
-            left: isDesktop ? '25%' : '15%',
-          }}
-          animationData={animationJson2}
-          loop={true}
-        />}
-        {isDesktop && <Lottie
-          style={{
-            width: width / (isDesktop ? 4 : 3) + 'px',
-            position: 'absolute',
-            bottom: isDesktop ? (0.804 * width - 657.143) + 'px' : 'none',
-            top: isDesktop ? 'none' : (1.186 * width - 14.915) + 'px',
-            left: isDesktop ? '0' : '3%',
-          }}
-          animationData={animationJson}
-          loop={true}
-        />}
+            <FinalCol>
+              {!isDesktop && <Block style={{ padding: "26px", marginBottom: "20px" }}>
+                <Text32 color='#FFF' center={true}><TextBorder>$GMF TOKEN</TextBorder></Text32>
+                <Text24 color='#FFF' center={true}><TextBorder>Crypto Presale</TextBorder></Text24>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Text24 color='#000'>💎 Staking rewards: </Text24>
+                  <ButtonWithBg bgColor="#C71C1C" textColor="#FFF">
+                    1591%
+                  </ButtonWithBg>
+                </div>
+              </Block>}
+              {/* ВАЖНО: Форма теперь только UI, логика подключения Metamask/WalletConnect/Coinbase берётся из WebProvider */}
+              <Form />
+            </FinalCol>
+          </FinalRow>
+
+          {/* Фоновое видео */}
+          <Video
+            {...videoArg}
+            controls={false}
+            autoPlay
+            playsInline
+            muted
+            loop
+            style={{
+              bottom: isDesktop ? (0.857 * width - 744.286) + 'px' : 'none',
+              top: isDesktop ? 'none' : (0.208 * width + 952) + 'px',
+              left: isDesktop ? '0' : (0.555 * width - 568.012) + 'px',
+            }}
+          >
+            {!isIOS && <source src={videoAndriod} type="video/webm" />}
+            {isIOS && <source src={videoIos} type="video/mp4" />}
+          </Video>
+
+          {/* Lottie-анимации */}
+          {isDesktop && <Lottie
+            style={{
+              width: width / (isDesktop ? 2.5 : 1.8) + 'px',
+              position: 'absolute',
+              bottom: isDesktop ? (0.902 * width - 808.571) + 'px' : 'none',
+              top: isDesktop ? 'none' : (1.549 * width - 5.701) + 'px',
+              left: isDesktop ? '25%' : '15%',
+            }}
+            animationData={animationJson2}
+            loop={true}
+          />}
+          {isDesktop && <Lottie
+            style={{
+              width: width / (isDesktop ? 4 : 3) + 'px',
+              position: 'absolute',
+              bottom: isDesktop ? (0.804 * width - 657.143) + 'px' : 'none',
+              top: isDesktop ? 'none' : (1.186 * width - 14.915) + 'px',
+              left: isDesktop ? '0' : '3%',
+            }}
+            animationData={animationJson}
+            loop={true}
+          />}
         </Wrapper2>
       </Container>
 
@@ -307,25 +336,25 @@ export function App() {
         style={{ marginTop: isDesktop ? '0' : '80px' }}
       >
         <Wrapper2>
-        <SecondTitle
-          style={{
-            justifyContent: 'center',
-            flexDirection: isDesktop ? 'row' : 'column',
-          }}
-        >
-          <span>Why Choose</span>
-          <span>GAMEFROG?</span>
-        </SecondTitle>
-        <Row gap="5px">
-          <Column direction="column" size={8} sizeSm={12}>
-            {/* Ваш контент/блоки, тексты, иконки и т.д. */}
-          </Column>
-          {isDesktop ? (
-            <Column alignCenter={true} gap='0' size={4} sizeSm={12}>
-              <Form />
+          <SecondTitle
+            style={{
+              justifyContent: 'center',
+              flexDirection: isDesktop ? 'row' : 'column',
+            }}
+          >
+            <span>Why Choose</span>
+            <span>GAMEFROG?</span>
+          </SecondTitle>
+          <Row gap="5px">
+            <Column direction="column" size={8} sizeSm={12}>
+              {/* Ваш контент/блоки, тексты, иконки и т.д. */}
             </Column>
-          ) : null}
-        </Row>
+            {isDesktop ? (
+              <Column alignCenter={true} gap='0' size={4} sizeSm={12}>
+                <Form />
+              </Column>
+            ) : null}
+          </Row>
         </Wrapper2>
       </Container>
 
@@ -341,7 +370,7 @@ export function App() {
         </SecondTitle>
         <CenterButton top={isDesktop ? 170 : 32}>
           {isDesktop ? (
-            <InfoButton imageUrl={walletBg} style={{ textTransform: 'none' }} onClick={() => { }}>
+            <InfoButton bgColor='#20C954' style={{ textTransform: 'none' }} onClick={() => { }}>
               Secure Your Tokens Now
               <svg
                 style={{ marginLeft: '10px' }}
@@ -359,7 +388,7 @@ export function App() {
             </InfoButton>
           ) : (
             <InfoButton
-              imageUrl={walletBg}
+              bgColor='#20C954'
               width={width * 0.95}
               style={{ color: '#000' }}
               onClick={() => { }}
@@ -405,8 +434,8 @@ export function App() {
 
       {/* --- 4-й контейнер --- */}
       <Container
-      id="community"
-       imageUrl={isDesktop ? bgFourth : bgFourthMob} height={isDesktop ? calculateNewHeight(1762, width) : (1618 * width) / 375 - 2}>
+        id="community"
+        imageUrl={isDesktop ? bgFourth : bgFourthMob} height={isDesktop ? calculateNewHeight(1762, width) : (1618 * width) / 375 - 2}>
         <SecondTitle
           column={true}
           style={{ marginBottom: isDesktop ? '60px' : '30px', marginTop: isDesktop ? '60px' : '30px' }}
@@ -503,7 +532,7 @@ export function App() {
 
       {/* --- 6-й контейнер --- */}
       <Container
-        id = "presale"
+        id="presale"
         imageUrl={isDesktop ? bgSix : bgSixMob}
         height={isDesktop ? calculateNewHeight(922, width) : (1837 * width) / 375 - 2}
         style={{
@@ -512,43 +541,43 @@ export function App() {
         }}
       >
         <Wrapper2>
-        <Row gap="5px">
-          <Column direction="column" size={8} sizeSm={12} gap='0'>
-            <SixTitle>
-              <span>hoW To participate</span>
-              <span>in the presale</span>
-            </SixTitle>
-            <CardRow>
-              <CardVideo>
-                {isDesktop ? <Text24>1. Create a crypto wallet</Text24> : <Text20>1. Create a crypto wallet</Text20>}
-                <CardImgWrap>
-                  <img src={card1} alt="card1" />
-                </CardImgWrap>
-              </CardVideo>
-              <CardVideo>
-                {isDesktop ? <Text24>2. Fund your wallet with ETH/USDT</Text24> : <Text20>2. Fund your wallet with ETH/USDT</Text20>}
-                <CardImgWrap>
-                  <img src={card2} alt="card2" />
-                </CardImgWrap>
-              </CardVideo>
-              <CardVideo>
-                {isDesktop ? <Text24>3. Connect to the GAMEFROG</Text24> : <Text20>3. Connect to the GAMEFROG</Text20>}
-                <CardImgWrap>
-                  <img src={card3} alt="card3" />
-                </CardImgWrap>
-              </CardVideo>
-              <CardVideo>
-                {isDesktop ? <Text24>4. Buy GAMEFROG</Text24> : <Text20>4. Buy GAMEFROG</Text20>}
-                <CardImgWrap>
-                  <img src={card4} alt="card4" />
-                </CardImgWrap>
-              </CardVideo>
-            </CardRow>
-          </Column>
-          <Column alignCenter={false} size={4} gap='0' sizeSm={12}>
-            <Form />
-          </Column>
-        </Row>
+          <Row gap="5px">
+            <Column direction="column" size={8} sizeSm={12} gap='0'>
+              <SixTitle>
+                <span>hoW To participate</span>
+                <span>in the presale</span>
+              </SixTitle>
+              <CardRow>
+                <CardVideo>
+                  {isDesktop ? <Text24>1. Create a crypto wallet</Text24> : <Text20>1. Create a crypto wallet</Text20>}
+                  <CardImgWrap>
+                    <img src={card1} alt="card1" />
+                  </CardImgWrap>
+                </CardVideo>
+                <CardVideo>
+                  {isDesktop ? <Text24>2. Fund your wallet with ETH/USDT</Text24> : <Text20>2. Fund your wallet with ETH/USDT</Text20>}
+                  <CardImgWrap>
+                    <img src={card2} alt="card2" />
+                  </CardImgWrap>
+                </CardVideo>
+                <CardVideo>
+                  {isDesktop ? <Text24>3. Connect to the GAMEFROG</Text24> : <Text20>3. Connect to the GAMEFROG</Text20>}
+                  <CardImgWrap>
+                    <img src={card3} alt="card3" />
+                  </CardImgWrap>
+                </CardVideo>
+                <CardVideo>
+                  {isDesktop ? <Text24>4. Buy GAMEFROG</Text24> : <Text20>4. Buy GAMEFROG</Text20>}
+                  <CardImgWrap>
+                    <img src={card4} alt="card4" />
+                  </CardImgWrap>
+                </CardVideo>
+              </CardRow>
+            </Column>
+            <Column alignCenter={false} size={4} gap='0' sizeSm={12}>
+              <Form />
+            </Column>
+          </Row>
         </Wrapper2>
       </Container>
 
@@ -572,48 +601,48 @@ export function App() {
       />
 
       {/* --- 9-й контейнер (FAQ) --- */}
-      <Container 
+      <Container
         id="faq"
         imageUrl={isDesktop ? bgFaq : bgFaqMob}
         height={isDesktop ? calculateNewHeight(1050, width) : (1221 * width) / 375 - 2}
         style={{ backgroundSize: '100% 100%', height: 'auto', paddingBottom: '50px' }}
       >
         <Wrapper2>
-        <FaqRow>
-          <FaqCol>
-            <SixTitle style={{ marginBottom: '30px' }}>
-              <span>FAQ</span>
-            </SixTitle>
-            {FaqData.map((item, idx) => (
-              <Collapse
-                key={idx}
-                btnText={item.btnText}
-                text={
-                  typeof item.text === 'string' ? (
-                    <Text16 color="var(--text-grey)" center={false}>
-                      {item.text}
-                    </Text16>
-                  ) : (
-                    item.text.map((t, tIdx) => (
-                      <Text16 key={tIdx} color="var(--text-grey)" center={false}>
-                        {t}
+          <FaqRow>
+            <FaqCol>
+              <SixTitle style={{ marginBottom: '30px' }}>
+                <span>FAQ</span>
+              </SixTitle>
+              {FaqData.map((item, idx) => (
+                <Collapse
+                  key={idx}
+                  btnText={item.btnText}
+                  text={
+                    typeof item.text === 'string' ? (
+                      <Text16 color="var(--text-grey)" center={false}>
+                        {item.text}
                       </Text16>
-                    ))
-                  )
-                }
-              />
-            ))}
-          </FaqCol>
-          <FaqCol style={{ marginTop: isDesktop ? '85px' : '0px' }}>
-            <Calculate />
-          </FaqCol>
-        </FaqRow>
+                    ) : (
+                      item.text.map((t, tIdx) => (
+                        <Text16 key={tIdx} color="var(--text-grey)" center={false}>
+                          {t}
+                        </Text16>
+                      ))
+                    )
+                  }
+                />
+              ))}
+            </FaqCol>
+            <FaqCol style={{ marginTop: isDesktop ? '85px' : '0px' }}>
+              <Calculate />
+            </FaqCol>
+          </FaqRow>
         </Wrapper2>
       </Container>
 
       {/* --- 10-й (финальный) контейнер --- */}
       <Container
-      id="contact"
+        id="contact"
         imageUrl={isDesktop ? bgFinal : bgFinalMob}
         height={isDesktop ? calculateNewHeight(979, width) : (1198 * width) / 375 - 2}
         style={
@@ -628,52 +657,52 @@ export function App() {
         }
       >
         <Wrapper2>
-        <RowStaking>
-          <ColStaking style={{ flex: 1 }}>
-            <Block style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <img src={logoText} style={{ width: '250px' }} alt="logo" />
-            </Block>
-            <Block>
-              <Text48 center={true}>Join the</Text48>
-              <Text48 center={true} color="#20C954">
-                <TextBorder>GAMEFROG</TextBorder>
+          <RowStaking>
+            <ColStaking style={{ flex: 1 }}>
+              <Block style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <img src={logoText} style={{ width: '250px' }} alt="logo" />
+              </Block>
+              <Block>
+                <Text48 center={true}>Join the</Text48>
+                <Text48 center={true} color="#20C954">
+                  <TextBorder>GAMEFROG</TextBorder>
+                </Text48>
+                <Text48 center={true}>Community</Text48>
+                <Text24 center={true}>Stay connected with our global movement:</Text24>
+                <RowStaking style={{ height: 'auto', flexDirection: 'row' }}>
+                  <div>
+                    {isDesktop && <Text16 center={true}>Latest news and memes</Text16>}
+                    <Btn style={{ width: isDesktop ? '160px' : "64px", maxWidth: isDesktop ? '160px' : '64px' }} bgImg={isDesktop ? socialXText : socialX} />
+                  </div>
+                  <div>
+                    {isDesktop && <Text16 center={true}>Instant community support</Text16>}
+                    <Btn style={{ width: isDesktop ? '183px' : "64px", maxWidth: isDesktop ? '183px' : '64px' }} bgImg={isDesktop ? socialTGText : socialTG} />
+                  </div>
+                </RowStaking>
+              </Block>
+            </ColStaking>
+            <Block style={isDesktop ? { flexGrow: 0, width: '550px', minWidth: '550px' } : {}}>
+              <Text48 center={true}>Have</Text48>
+              <Text48 center={true}>Questions?</Text48>
+              <Text48 center={true} color="#FC743A">
+                <TextBorder>Get in Touch</TextBorder>
               </Text48>
-              <Text48 center={true}>Community</Text48>
-              <Text24 center={true}>Stay connected with our global movement:</Text24>
-              <RowStaking style={{ height: 'auto', flexDirection: 'row' }}>
-                <div>
-                  {isDesktop && <Text16 center={true}>Latest news and memes</Text16>}
-                  <Btn style={{ width: isDesktop ? '160px' : "64px", maxWidth: isDesktop ? '160px' : '64px' }} bgImg={isDesktop ? socialXText : socialX} />
-                </div>
-                <div>
-                  {isDesktop && <Text16 center={true}>Instant community support</Text16>}
-                  <Btn style={{ width: isDesktop ? '183px' : "64px", maxWidth: isDesktop ? '183px' : '64px' }} bgImg={isDesktop ? socialTGText : socialTG} />
-                </div>
-              </RowStaking>
+              <FinalForm>
+                <FinalFormInput placeholder="Name:" />
+                <FinalFormInput inValid={true} placeholder="Email:" />
+                <FinalFormTextarea placeholder="Message:" />
+                <FinalFormFooter>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                    {errorText && <ErrorText>{errorText}</ErrorText>}
+                    <FinalFormLink href="mailto:support@gamefrog.io">support@gamefrog.io</FinalFormLink>
+                  </div>
+                  <FinalFormBtn onClick={() => {
+                    setErrorText('Error: Please enter a valid email address');
+                  }}>Send</FinalFormBtn>
+                </FinalFormFooter>
+              </FinalForm>
             </Block>
-          </ColStaking>
-          <Block style={isDesktop ? { flexGrow: 0, width: '550px', minWidth: '550px' } : {}}>
-            <Text48 center={true}>Have</Text48>
-            <Text48 center={true}>Questions?</Text48>
-            <Text48 center={true} color="#FC743A">
-              <TextBorder>Get in Touch</TextBorder>
-            </Text48>
-            <FinalForm>
-              <FinalFormInput placeholder="Name:" />
-              <FinalFormInput inValid={true} placeholder="Email:" />
-              <FinalFormTextarea placeholder="Message:" />
-              <FinalFormFooter>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                {errorText && <ErrorText>{errorText}</ErrorText>}
-                <FinalFormLink href="mailto:support@gamefrog.io">support@gamefrog.io</FinalFormLink>
-                </div>
-                <FinalFormBtn onClick={()=>{
-                  setErrorText('Error: Please enter a valid email address');
-                }}>Send</FinalFormBtn>
-              </FinalFormFooter>
-            </FinalForm>
-          </Block>
-        </RowStaking>
+          </RowStaking>
         </Wrapper2>
       </Container>
     </Wrapper>

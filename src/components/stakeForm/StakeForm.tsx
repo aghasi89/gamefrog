@@ -64,7 +64,7 @@ export const StakeForm = ({
 
       {/* Кнопка действия */}
       <InfoButton
-        imageUrl={walletBg}
+        bgColor='#20C954'
         style={{ textTransform: 'none', marginTop: '30px' }}
         onClick={() => {
           if (onAction) {
@@ -85,6 +85,10 @@ const Card = styled.div`
   border: 1px solid #000000;
   background-color: #FECF03;
   padding: 30px;
+  @media (max-width: 1024px) {
+    padding: 30px 12px;
+  }
+
 `;
 
 const Input = styled.div`
@@ -108,7 +112,9 @@ const Input = styled.div`
     color: var(--color-black);
     background-color: transparent;
     padding-left: 10px;
+    width: 50%;
   }
+   
 `;
 
 const InputBtn = styled.button`

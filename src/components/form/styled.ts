@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const FormS = styled.div.withConfig({
-    shouldForwardProp: prop => !['imageUrl'].includes(prop)
-})<{ imageUrl: string }>`
-  background-image: url(${({imageUrl}) => imageUrl});
+  shouldForwardProp: prop => !['imageUrl'].includes(prop)
+}) <{ imageUrl?: string }>`
+  ${({imageUrl})=>imageUrl?` background-image: url(${imageUrl})`:"border: 1px solid #000000;box-shadow: 0 2px 2px #000000;background-color: var(--color-about); border-radius: 24px;"};
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center center;
@@ -82,13 +82,13 @@ export const CountDownSeparator = styled.span`
 `;
 
 export const Text16 = styled.p.withConfig({
-    shouldForwardProp: prop => !['center'].includes(prop)
-})<{center: boolean}>`
+  shouldForwardProp: prop => !['center'].includes(prop)
+}) <{ center: boolean }>`
   font-family: var(--font);
   font-size: 16px;
   font-weight: 500;
   color: var(--color-black);
-  text-align: ${({center}) => center ? 'center' : 'text-left'};
+  text-align: ${({ center }) => center ? 'center' : 'text-left'};
   margin: 3px 0;
 `;
 
@@ -159,23 +159,34 @@ export const Input = styled.div`
   overflow: hidden;
   
   & input {
+    padding: 12px 8px;
     width: 85%;
     font: inherit;
     border: none;
     outline: none;
-    height: 62px;
     background-color: transparent;
     font-weight: 500;
     font-size: 24px;
     color: #000000;
     font-family: var(--font);
+    &::placeholder,
+    &::-webkit-input-placeholder {
+      color: #00000080;
+    }
+    &:-ms-input-placeholder {
+      color: #00000080;
+    }
   }
 `;
 
 export const InputText = styled.span`
   font-weight: 500;
   font-size: 24px;
-  color: #000000;
+  color: #00000080;
   font-family: var(--font);
-  opacity: 0.5;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-right: 6px;
+  
 `
