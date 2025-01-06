@@ -10,7 +10,7 @@ const RunningText = styled.div`
     padding: 8px 0;
     width: 100%;
     font-size: 24px;
-    z-index: 150;
+    z-index: 10;
     &:after {
         content: '';
         display: inline-block;

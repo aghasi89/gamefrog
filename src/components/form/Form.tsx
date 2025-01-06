@@ -413,7 +413,7 @@ export const Form = () => {
         <Modal style = {{gap:"16px"}} onClose={() => setShowPopup(false)}>
             <ModalTitle color="#20C954">CONNECT WALLET</ModalTitle>
             
-            <Text20 center={true} >If you already have a wallet, select your desired wallet from the options below. If you don’t have a wallet, download BestWallet to get started.</Text20>
+            <Text20 center={true} >If you already have a wallet, select your desired wallet from the options below.</Text20>
             {/* Metamask */}
             <ButtonWithBg
               bgColor='#EC801C'

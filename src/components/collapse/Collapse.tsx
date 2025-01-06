@@ -25,7 +25,7 @@ export const Collapse = ({text, btnText,open,onPress}: Props) => {
             setExpanded(!isExpanded)
             onPress && onPress(!isExpanded)
             }}>
-         <Text24>{btnText}</Text24>
+         <Text24 style={{maxWidth:"80%"}}>{btnText}</Text24>
         <CollapseButton bgColor='#8BC6FE' isExpanded={isExpanded} >
         <span>
             <img src={Icon}/>

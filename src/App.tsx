@@ -52,6 +52,7 @@ import {
   ErrorText,
   Wrapper2,
   B,
+  Text48Span,
 } from './styled';
 
 import { Column, Row } from './utils';
@@ -64,6 +65,8 @@ import animationJson2 from './assets/video/Text2.json';
 import animationJson from './assets/video/Text1.json';
 import animationJsonInfoGraphic from './assets/video/Infographics.json';
 import { Block, ColStaking, RowStaking, TextBorder } from './Staking';
+import animationJsonInfoGraphicMob from './assets/video/Infographics_mob.json'
+
 
 // Изображения
 const logoText = require('./assets/images/logo_staking.png');
@@ -174,6 +177,16 @@ export function App() {
             }}
           >
             <FinalCol style={{ marginTop: isDesktop ? '0' : '508px' }}>
+            {isDesktop && <Block style={{ padding: "26px", marginBottom: "20px" }}>
+                <Text32 color='#FFF' center={true}><TextBorder>$GMF TOKEN</TextBorder></Text32>
+                <Text24 color='#FFF' center={true}><TextBorder>Crypto Presale</TextBorder></Text24>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Text24 color='#000'>💎 Staking rewards: </Text24>
+                  <ButtonWithBg bgColor="#C71C1C" textColor="#FFF">
+                    1591%
+                  </ButtonWithBg>
+                </div>
+              </Block>}
               <FaqCard>
                 <Border
                   color="#E5E5E5"
@@ -194,7 +207,7 @@ export function App() {
                 >
                   <Text24>🚀 Launch price: </Text24>
                   <ButtonWithBg bgColor="#23BB52" textColor="#FFF">
-                    $ 0.01
+                    $ 0.10
                   </ButtonWithBg>
                 </Border>
                 <Border
@@ -584,12 +597,34 @@ export function App() {
       {/* --- 7-й контейнер --- */}
       <Container
         id="tokenomics"
-        imageUrl={isDesktop ? bgSeven : bgSevenMob}
-        height={isDesktop ? calculateNewHeight(922, width) : (910 * width) / 375 - 2}
+        imageUrl={isDesktop ? bgSeven : undefined}
+        height={isDesktop ? calculateNewHeight(922, width) : (880 * width) / 375 - 2}
+        style={{
+          background: 'linear-gradient(0deg, rgba(173,255,90,1) 0%, rgba(245,166,124,1) 100%)',
+          textAlign: 'center',
+          marginTop: isDesktop ? '0' : '80px',
+        }}
       >
+        
+          <><Text48Span color='#FFF' center={true}>
+                Fair distributione 
+                <Text48Span > for a </Text48Span> Bright 
+                future
+              </Text48Span>
+              <Text20 center={true} color='#00000066' style={{
+                margin: '20px 0 16px 0',
+              }}>Total Supply: <span style={{color:"#000"}}>6,900,000,000 $GMF</span></Text20>
+              </>
+              
+              
         {isDesktop && <Lottie
           style={{ width: '75%', position: 'absolute', left: 0.093 * width - 9.714 + 'px', top: 0.222 * width - 14.143 + 'px' }}
           animationData={animationJsonInfoGraphic}
+          loop={true}
+        />}
+        {!isDesktop && <Lottie
+          style={{ width: '100%' }}
+          animationData={animationJsonInfoGraphicMob}
           loop={true}
         />}
       </Container>
@@ -670,14 +705,14 @@ export function App() {
                 <Text48 center={true}>Community</Text48>
                 <Text24 center={true}>Stay connected with our global movement:</Text24>
                 <RowStaking style={{ height: 'auto', flexDirection: 'row' }}>
-                  <div>
+                <a href='https://x.com/gamefrogvip/' target='_blank'><div>
                     {isDesktop && <Text16 center={true}>Latest news and memes</Text16>}
                     <Btn style={{ width: isDesktop ? '160px' : "64px", maxWidth: isDesktop ? '160px' : '64px' }} bgImg={isDesktop ? socialXText : socialX} />
-                  </div>
-                  <div>
+                  </div></a>
+                  <a href='https://x.com/gamefrogvip/' target='_blank'><div>
                     {isDesktop && <Text16 center={true}>Instant community support</Text16>}
                     <Btn style={{ width: isDesktop ? '183px' : "64px", maxWidth: isDesktop ? '183px' : '64px' }} bgImg={isDesktop ? socialTGText : socialTG} />
-                  </div>
+                  </div></a>
                 </RowStaking>
               </Block>
             </ColStaking>

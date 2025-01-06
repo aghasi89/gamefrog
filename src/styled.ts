@@ -419,6 +419,19 @@ margin: 0;
   font-size: 32px;
 }
 `;
+export const Text48Span = styled.span.withConfig({
+  shouldForwardProp: prop => !['center', 'color'].includes(prop)
+})<{ center?: boolean, color?: string }>`
+font-family: var(--font-arco);
+font-size: 48px;
+font-weight: 500;
+color: ${({color}) => color ? color : 'var(--color-black)'};
+text-align: center;
+margin: 0;
+@media (max-width: 1024px) {
+  font-size: 32px;
+}
+`;
 
 export const FaqRow = styled.div.withConfig({
     shouldForwardProp: prop => !['column'].includes(prop)

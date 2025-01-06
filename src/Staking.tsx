@@ -253,7 +253,7 @@ export const Staking = () => {
         isPadding={true}
         imageUrl={isDesktop ? bgPage : bgPageMob}
         height={isDesktop ? calculateNewHeight(2340, width) : 3636}
-        style={!isDesktop ? { backgroundPositionY: 'bottom' } : { backgroundPositionY: 'top' }}
+        style={!isDesktop ? { backgroundPositionY: 'bottom' } : { backgroundPositionY: 'top', height: 'auto' }}
       >
         <Header />
 
@@ -340,7 +340,7 @@ export const Staking = () => {
           </Cards>
         </CardWra>
         <br />
-        <StakeRow>
+        <StakeRow style={{marginBottom: '30px', padding: '0 16px'}}>
           {/* STAKE */}
           <StakeCol><br />
           <StakeForm
@@ -404,16 +404,16 @@ export const Staking = () => {
           )}
         </StakeRow>
 
-        <Row>
+        <Row style={{marginBottom: '30px',padding: '0 16px'}}>
           <Text32 color="#ffffff">Total supply</Text32>
         </Row>
-        <Row style={{ justifyContent: 'center', marginBottom: '60px' }}>
+        <Row style={{ justifyContent: 'center', marginBottom: '60px' ,padding: '0 16px'}}>
           <Column>
             <Calculate column={true} />
           </Column>
         </Row>
 
-        <RowStaking>
+        <RowStaking style={{ marginBottom: '60px',padding: '0 16px' }}>
           <ColStaking style={{ flex: 1 }}>
             <Block style={{ justifyContent: 'center', alignItems: 'center' }}>
               <img src={logoText} style={{ width: '250px' }} alt="logo" />
@@ -426,14 +426,14 @@ export const Staking = () => {
               <Text48 center={true}>Community</Text48>
               <Text24 center={true}>Stay connected with our global movement:</Text24>
               <RowStaking style={{ height: 'auto',flexDirection: 'row' }}>
-              <div>
+              <a href='https://x.com/gamefrogvip/' target='_blank'><div>
                   {isDesktop && <Text16 center={true}>Latest news and memes</Text16>}
                   <Btn style={{ width: isDesktop?'160px':"64px", maxWidth: isDesktop?'160px':'64px' }}  bgImg={isDesktop?socialXText:socialX}/>
-                </div>
-                <div>
+                </div></a>
+                <a href='https://x.com/gamefrogvip/' target='_blank'><div>
                   {isDesktop && <Text16 center={true}>Instant community support</Text16>}
                   <Btn style={{ width: isDesktop?'183px':"64px", maxWidth: isDesktop?'183px':'64px' }} bgImg={isDesktop?socialTGText:socialTG} />
-                </div>
+                </div></a>  
               </RowStaking>
             </Block>
           </ColStaking>
@@ -505,6 +505,15 @@ const Column = styled.div`
 const CardWra = styled.div`
   width: 100%;
   min-width: 1024px;
+  position: relative;
+  z-index: 1;
+  @media (max-width: 1024px) {
+    min-width: 100%;
+  }
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  } 
 `;
 
 const Cards = styled.div`
@@ -514,6 +523,8 @@ const Cards = styled.div`
   max-width: 1376px;
   margin: 30px auto 0;
   gap: 20px;
+  min-width: 1024px;
+  flex-wrap: nowrap;
 `;
 
 const Card = styled.div`
