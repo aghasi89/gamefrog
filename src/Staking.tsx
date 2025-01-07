@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { parseUnits, formatUnits } from 'ethers';
 
+// Локальные/ваши импорты
 import { Header } from './components/header';
 import { StakeForm } from './components/stakeForm';
 import { Calculate } from './components/calculate';
 import Modal from './components/modal/Modal';
 
+// Стили
 import {
   Btn,
   Container,
@@ -25,59 +27,76 @@ import {
   MoveText,
   SecondTitleInStaking,
   InfoButton,
+  ButtonWithBg,
 } from './styled';
 
 import { useWindowSize } from './hooks';
 import { calculateNewHeight } from './App';
 import { Cloud, CloudContainer } from './assets/cloud';
 
+// Web3Context с вашим connectMetamask/WalletConnect/CoinbaseWallet
 import { Web3Context } from './WebProvider';
 
+// Картинка для модалки «Успешно застейкано»
 import SuccessStakedImage from './assets/images/success_staked_modal.png';
+
+// Прочие ресурсы
 const walletBg = require('./assets/images/btn-wallet.png');
 const bgPage = require('./assets/images/staking-bg.png');
 const bgPageMob = require('./assets/images/coins-bg.png');
 const socialX = require('./assets/images/x.png');
-const socialTG = require('./assets/images/telegram.png');
 const socialXText = require('./assets/images/x_text.png');
+const socialTG = require('./assets/images/telegram.png');
 const socialTGText = require('./assets/images/telegram_text.png');
+const socialFB = require('./assets/images/fb.png');
+const socialFBText = require('./assets/images/facebook_text.png');
+const socailInst = require('./assets/images/insta.png');
+const socialInstText = require('./assets/images/instagram_text.png');
+
+
+
 const logoText = require('./assets/images/logo_staking.png');
 
-// Общая сумма выделенная на пул (345,000,000 * 10^18)
+// Пул стейкинга: 345,000,000 * 10^18
 const STAKING_POOL_ALLOCATION = parseUnits('345000000', 18);
 
 export const Staking = () => {
   const { width } = useWindowSize();
   const isDesktop = width >= 1024;
 
+  // Достаём из контекста всё нужное для взаимодействия с контрактами
   const {
     walletAddress,
     provider,
     stakingContract,
     presaleContract,
+    connectMetamask,
+    connectWalletConnect,
+    connectCoinbaseWallet,
   } = useContext(Web3Context);
 
-  // Показывает, закончился ли пресейл
+  // Проверка: пресейл закончен или нет
   const [isPresaleEnded, setIsPresaleEnded] = useState<boolean>(false);
 
-  // Для карточек: totalStaked (всего в пуле), poolRemaining (сколько ещё осталось)
+  // Данные для карточек вверху
   const [totalStaked, setTotalStaked] = useState<string>('0.0');
   const [poolRemaining, setPoolRemaining] = useState<string>('0.0');
+  const [apy, setApy] = useState<string>('0%');
+  const [apr, setApr] = useState<string>('0%');
 
-  // APY/APR (пока захардкожены)
-  const [apy, setApy] = useState<string>('40%');
-  const [apr, setApr] = useState<string>('40%');
-
-  // Модалка: "Successfully Staked!"
+  // Модалка «Успешно застейкано»
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
-  // **Показываем**, сколько пользователь уже застейкал (в stakingContract.stakers[user].amount)
+  // Сколько пользователь застейкал
   const [userStaked, setUserStaked] = useState<string>('0.0');
 
-  // Подсчёт прибыли (40%) при вводе суммы (например, 1000 => 400.0)
+  // Локальный расчёт (40%) для UI
   const [calcProfit, setCalcProfit] = useState<string>('0.0');
 
-  // Облака (анимация для мобилки)
+  // Попап «Connect wallet»
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+
+  // Анимация облаков (мобилка)
   const clouds = [
     { top: 0, delay: 0, duration: 30 },
     { top: 20, delay: 0, duration: 50 },
@@ -87,6 +106,7 @@ export const Staking = () => {
     { top: 240, delay: 0, duration: 20 },
   ];
 
+  // При загрузке/изменении кошелька -> подгружаем данные
   useEffect(() => {
     checkPresaleEnded();
     fetchStakingData();
@@ -103,31 +123,45 @@ export const Staking = () => {
     }
   };
 
-  // Запрашиваем данные из stakingContract
+  // Получаем данные из стейкинг-контракта + считаем APR/APY
   const fetchStakingData = async () => {
     if (!stakingContract) return;
     try {
-      // 1) totalStaked (getTotalStaked) -> bigint
+      // 1) totalStaked
       const rawStaked: bigint = await stakingContract.getTotalStaked();
+      const stakedFloat = parseFloat(formatUnits(rawStaked, 18));
+      setTotalStaked(stakedFloat.toFixed(1));
 
-      // округлим до 1 знака
-      const stakedFloat = parseFloat(formatUnits(rawStaked, 18)).toFixed(1);
-      setTotalStaked(stakedFloat);
-
-      // 2) poolRemaining = 345e6 - totalStaked
+      // 2) poolRemaining
       const remain = STAKING_POOL_ALLOCATION - rawStaked;
-      const remainFloat = parseFloat(formatUnits(remain, 18)).toFixed(1);
-      setPoolRemaining(remainFloat);
+      const remainFloat = parseFloat(formatUnits(remain, 18));
+      setPoolRemaining(remainFloat.toFixed(1));
 
-      // 3) userStaked - сколько застейкал текущий пользователь
+      // 3) userStaked
       if (walletAddress) {
         const stakerInfo = await stakingContract.stakers(walletAddress);
-        // stakerInfo.amount -> bigint
         const rawUserStaked = stakerInfo.amount;
-        const userFloat = parseFloat(formatUnits(rawUserStaked, 18)).toFixed(1);
-        setUserStaked(userFloat);
+        const userFloat = parseFloat(formatUnits(rawUserStaked, 18));
+        setUserStaked(userFloat.toFixed(1));
       }
 
+      // 4) dailyReward (public в стейкинге)
+      const rawDailyReward: bigint = await stakingContract.dailyReward();
+      const dailyRewardFloat = parseFloat(formatUnits(rawDailyReward, 18));
+
+      // 5) Считаем APR/APY
+      // dailyFraction = dailyReward / totalStaked
+      // APR = dailyFraction * 365 * 100%, APY ~ ( (1 + dailyFraction)^365 - 1 ) * 100%
+      if (stakedFloat > 0) {
+        const dailyFraction = dailyRewardFloat / stakedFloat;
+        const aprVal = dailyFraction * 365 * 100;
+        const apyVal = (Math.pow(1 + dailyFraction, 365) - 1) * 100;
+        setApr(aprVal.toFixed(2) + '%');
+        setApy(apyVal.toFixed(2) + '%');
+      } else {
+        setApr('0%');
+        setApy('0%');
+      }
     } catch (err) {
       console.error('Error fetching staking data:', err);
     }
@@ -135,33 +169,36 @@ export const Staking = () => {
 
   // ============================= STAKE ==========================
   const handleStake = async (amount: string) => {
+    // 1. Проверяем, есть ли signer
     if (!provider || !walletAddress) {
-      alert('Connect wallet first');
+      // Вместо alert(...) показываем попап
+      setShowPopup(true);
       return;
     }
     if (!amount || Number(amount) <= 0) {
       alert('Please enter a valid amount');
       return;
     }
-
+  
     try {
-      const signer = await provider.getSigner();
-
+      // 2. Получаем signer (если provider = BrowserProvider)
+      const signer = await provider.getSigner(); 
+  
       if (!isPresaleEnded) {
-        // Пресейл активен => stakeFromPending
         if (!presaleContract) {
           alert('Presale contract not found');
           return;
         }
+        // 3. Подключаем контракт к signer
         const presale = presaleContract.connect(signer);
+        // 4. Отправляем транзакцию
         const tx = await presale.stakeFromPending(parseUnits(amount, 18));
         await tx.wait();
-
+  
         alert(`Staked ${amount} from pending successfully!`);
         setIsOpenModal(true);
-
+  
       } else {
-        // Пресейл завершён => stakingContract.stake
         if (!stakingContract) {
           alert('Staking contract not found');
           return;
@@ -169,14 +206,13 @@ export const Staking = () => {
         const staking = stakingContract.connect(signer);
         const tx = await staking.stake(parseUnits(amount, 18));
         await tx.wait();
-
+  
         alert(`Staked ${amount} tokens successfully!`);
         setIsOpenModal(true);
       }
-
-      // Обновим данные
+  
       fetchStakingData();
-
+  
     } catch (error) {
       console.error('Error in handleStake:', error);
       alert('Error in handleStake. Check console.');
@@ -189,19 +225,18 @@ export const Staking = () => {
       alert('Cannot claim yet: presale not ended!');
       return;
     }
-    if (!provider || !stakingContract) {
-      alert('Connect wallet first');
+    if (!provider || !stakingContract || !walletAddress) {
+      setShowPopup(true);
       return;
     }
     try {
-      const signer = await provider.getSigner();
+      const signer = provider.getSigner();
       const staking = stakingContract.connect(signer);
       const tx = await staking.claimReward();
       await tx.wait();
 
       alert('Claimed successfully!');
       fetchStakingData();
-
     } catch (error) {
       console.error('Error claiming reward:', error);
       alert('Error claiming reward. Check console.');
@@ -214,8 +249,8 @@ export const Staking = () => {
       alert('Cannot unstake yet: presale not ended!');
       return;
     }
-    if (!provider || !stakingContract) {
-      alert('Connect wallet first');
+    if (!provider || !stakingContract || !walletAddress) {
+      setShowPopup(true);
       return;
     }
     if (!amount || Number(amount) <= 0) {
@@ -223,21 +258,20 @@ export const Staking = () => {
       return;
     }
     try {
-      const signer = await provider.getSigner();
+      const signer = provider.getSigner();
       const staking = stakingContract.connect(signer);
       const tx = await staking.withdraw(parseUnits(amount, 18));
       await tx.wait();
 
       alert('Unstaked successfully!');
       fetchStakingData();
-
     } catch (error) {
       console.error('Error unstaking:', error);
       alert('Error unstaking. Check console.');
     }
   };
 
-  // При вводе суммы в STAKE → считаем 40%
+  // При вводе суммы → считаем «локальные» 40% (UI)
   const handleStakeAmountChange = (amount: number) => {
     const profit = (amount * 0.4).toFixed(1);
     setCalcProfit(profit);
@@ -253,11 +287,15 @@ export const Staking = () => {
         isPadding={true}
         imageUrl={isDesktop ? bgPage : bgPageMob}
         height={isDesktop ? calculateNewHeight(2340, width) : 3636}
-        style={!isDesktop ? { backgroundPositionY: 'bottom' } : { backgroundPositionY: 'top', height: 'auto' }}
+        style={
+          !isDesktop
+            ? { backgroundPositionY: 'bottom' }
+            : { backgroundPositionY: 'top', height: 'auto' }
+        }
       >
         <Header />
 
-        {/* Анимация облаков на мобилке */}
+        {/* Облака (мобилка) */}
         {!isDesktop && (
           <CloudContainer>
             {clouds.map((cloud, index) => (
@@ -270,7 +308,7 @@ export const Staking = () => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M239.111 44.6661C239.111 32.9811 223.866 23.5085 205.06 23.5085C..."
+                    d="M239.111 44.6661C239.111 32.9811 223.866 23.5085 205.06 23.5085C204.118 23.5085 203.188 23.5386 202.265 23.5853C199.457 13.6578 185.521 6.11221 168.739 6.11221C160.52 6.11221 152.982 7.92191 147.098 10.9347C141.296 4.41584 130.123 0 117.285 0C104.505 0 93.3759 4.37737 87.552 10.8484C82.0369 8.45835 75.335 7.05255 68.1011 7.05255C49.2955 7.05255 34.0506 16.5251 34.0506 28.2102C15.2449 28.2102 0 37.6828 0 49.3678C0 61.0528 15.2449 70.5254 34.0506 70.5254C34.0506 82.2105 49.2955 91.6831 68.1011 91.6831C77.0787 91.6831 85.2395 89.5208 91.3229 85.9931C97.1434 92.4715 108.28 96.8549 121.069 96.8549C136.438 96.8549 149.424 90.5264 153.659 81.8355C159.34 84.4767 166.394 86.041 174.036 86.041C192.381 86.041 207.33 77.0261 208.052 65.7377C225.455 64.7954 239.111 55.7242 239.111 44.6661Z"
                     fill="white"
                   />
                 </svg>
@@ -314,13 +352,13 @@ export const Staking = () => {
 
         <CardWra>
           <Cards>
-            {/* totalStaked */}
+            {/* Total Staked */}
             <Card>
               <Text16 center={true}>Total Staked</Text16>
               <Text32 center={true}>{totalStaked}</Text32>
             </Card>
 
-            {/* poolRemaining */}
+            {/* Pool Remaining */}
             <Card>
               <Text16 center={true}>Pool Remaining</Text16>
               <Text32 center={true}>{poolRemaining}</Text32>
@@ -339,21 +377,21 @@ export const Staking = () => {
             </Card>
           </Cards>
         </CardWra>
-        <br />
-        <StakeRow style={{marginBottom: '30px', padding: '0 16px'}}>
+
+        <StakeRow style={{ marginBottom: '30px', padding: '0 16px' }}>
           {/* STAKE */}
-          <StakeCol><br />
-          <StakeForm
-            title="STAKE"
-            text={`You Will Earn: ~40% => ${calcProfit}\nYour staked: ${userStaked} tokens`}
-            value="0"
-            buttonText="STAKE"
-            onAction={(amount) => handleStake(amount)}
-            onAmountChange={(num) => {
-              setCalcProfit((num * 0.4).toFixed(1));
-            }}
-          />
-             </StakeCol>
+          <StakeCol>
+            <StakeForm
+              title="STAKE"
+              text={`You Will Earn: ~40% => ${calcProfit}\nYour staked: ${userStaked} tokens`}
+              value="0"
+              buttonText="STAKE"
+              onAction={(amount) => handleStake(amount)}
+              onAmountChange={(num) => {
+                setCalcProfit((num * 0.4).toFixed(1));
+              }}
+            />
+          </StakeCol>
 
           {/* CLAIM */}
           {isPresaleEnded ? (
@@ -398,22 +436,24 @@ export const Staking = () => {
                 value="0"
                 buttonText="UNSTAKE"
                 onAction={() => alert('Presale not ended!')}
-                //disabled
               />
             </StakeCol>
           )}
         </StakeRow>
 
-        <Row style={{marginBottom: '30px',padding: '0 16px'}}>
+        <Row style={{ marginBottom: '30px', padding: '0 16px' }}>
           <Text32 color="#ffffff">Total supply</Text32>
         </Row>
-        <Row style={{ justifyContent: 'center', marginBottom: '60px' ,padding: '0 16px'}}>
+
+        <Row style={{ justifyContent: 'center', marginBottom: '60px', padding: '0 16px' }}>
           <Column>
+            {/* Показываем ваш «Calculate» без дополнительных запросов к контракту */}
             <Calculate column={true} />
           </Column>
         </Row>
 
-        <RowStaking style={{ marginBottom: '60px',padding: '0 16px' }}>
+        {/* Блок "Join the community" */}
+        <RowStaking style={{ marginBottom: '60px', padding: '0 16px' }}>
           <ColStaking style={{ flex: 1 }}>
             <Block style={{ justifyContent: 'center', alignItems: 'center' }}>
               <img src={logoText} style={{ width: '250px' }} alt="logo" />
@@ -425,18 +465,59 @@ export const Staking = () => {
               </Text48>
               <Text48 center={true}>Community</Text48>
               <Text24 center={true}>Stay connected with our global movement:</Text24>
-              <RowStaking style={{ height: 'auto',flexDirection: 'row' }}>
-              <a href='https://x.com/gamefrogvip/' target='_blank'><div>
-                  {isDesktop && <Text16 center={true}>Latest news and memes</Text16>}
-                  <Btn style={{ width: isDesktop?'160px':"64px", maxWidth: isDesktop?'160px':'64px' }}  bgImg={isDesktop?socialXText:socialX}/>
-                </div></a>
-                <a href='https://x.com/gamefrogvip/' target='_blank'><div>
-                  {isDesktop && <Text16 center={true}>Instant community support</Text16>}
-                  <Btn style={{ width: isDesktop?'183px':"64px", maxWidth: isDesktop?'183px':'64px' }} bgImg={isDesktop?socialTGText:socialTG} />
-                </div></a>  
-              </RowStaking>
+              <Socials>
+              <RowStakingQ >
+                <a href='https://x.com/gamefrogvip/' target='_blank' rel="noreferrer">
+                  <div>
+                    <Btn
+                      style={{
+                        width: isDesktop ? '184px' : '64px',
+                        maxWidth: isDesktop ? '184px' : '64px'
+                      }}
+                      bgImg={isDesktop ? socialXText : socialX}
+                    />
+                  </div>
+                </a>
+                <a href='https://t.me/gamefrogvip/' target='_blank' rel="noreferrer">
+                  <div>
+                    <Btn
+                      style={{
+                        width: isDesktop ? '181px' : '64px',
+                        maxWidth: isDesktop ? '181px' : '64px'
+                      }}
+                      bgImg={isDesktop ? socialTGText : socialTG}
+                    />
+                  </div>
+                </a>
+              </RowStakingQ>
+              <RowStakingQ style={{ height: 'auto', flexDirection: 'row' }}>
+                <a href='https://www.facebook.com/gamefrogofficial' target='_blank' rel="noreferrer">
+                  <div>
+                    <Btn
+                      style={{
+                        width: isDesktop ? '184px' : '64px',
+                        maxWidth: isDesktop ? '184px' : '64px'
+                      }}
+                      bgImg={isDesktop ? socialFBText : socialFB}
+                    />
+                  </div>
+                </a>
+                <a href='https://www.instagram.com/gamefrogvip/' target='_blank' rel="noreferrer">
+                  <div>
+                    <Btn
+                      style={{
+                        width: isDesktop ? '184px' : '64px',
+                        maxWidth: isDesktop ? '184px' : '64px'
+                      }}
+                      bgImg={isDesktop ? socialInstText : socailInst}
+                    />
+                  </div>
+                </a>
+              </RowStakingQ>
+              </Socials>
             </Block>
           </ColStaking>
+
           <Block style={isDesktop ? { flexGrow: 0, width: '550px', minWidth: '550px' } : {}}>
             <Text48 center={true}>Have</Text48>
             <Text48 center={true}>Questions?</Text48>
@@ -456,18 +537,73 @@ export const Staking = () => {
         </RowStaking>
       </Container>
 
-      {/* Модалка "Successfully STAKED" */}
+      {/* Модалка «Successfully STAKED» */}
       {isOpenModal && (
         <Modal onClose={() => setIsOpenModal(false)}>
           <img height={179} src={SuccessStakedImage} alt="success" />
           <ModalTitle color="#20C954">Successfully STAKED</ModalTitle>
           <InfoButton
-            bgColor='#20C954'
+            bgColor="#20C954"
             style={{ textTransform: 'none', marginTop: '30px' }}
             onClick={() => setIsOpenModal(false)}
           >
-            <Text24>OK</Text24>
+            <Text16>OK</Text16>
           </InfoButton>
+        </Modal>
+      )}
+
+      {/* Модальное окно «Connect wallet» */}
+      {showPopup && (
+        <Modal style={{ gap: '16px' }} onClose={() => setShowPopup(false)}>
+          <ModalTitle color="#20C954">CONNECT WALLET</ModalTitle>
+          <Text16 center={true}>
+            If you already have a wallet, select your desired wallet from the options below.
+            If you don’t have a wallet, download BestWallet to get started.
+          </Text16>
+
+          {/* Метамаск (только desktop?) */}
+          {isDesktop && (
+            <ButtonWithBg
+              bgColor="#EC801C"
+              onClick={async () => {
+                setShowPopup(false);
+                await connectMetamask();
+              }}
+              style={{ width: '100%', color: '#fff', fontSize: '24px' }}
+            >
+              <RowFlex>
+                Metamask <img src={require('./assets/images/metamask.png')} alt="Metamask" />
+              </RowFlex>
+            </ButtonWithBg>
+          )}
+
+          {/* WalletConnect */}
+          <ButtonWithBg
+            bgColor="#0888F0"
+            onClick={async () => {
+              setShowPopup(false);
+              await connectWalletConnect();
+            }}
+            style={{ width: '100%', color: '#fff', fontSize: '24px' }}
+          >
+            <RowFlex>
+              Wallet Connect <img src={require('./assets/images/wallet-connect.png')} alt="WC" />
+            </RowFlex>
+          </ButtonWithBg>
+
+          {/* Coinbase */}
+          <ButtonWithBg
+            bgColor="#0052FF"
+            onClick={async () => {
+              setShowPopup(false);
+              await connectCoinbaseWallet();
+            }}
+            style={{ width: '100%', color: '#fff', fontSize: '24px' }}
+          >
+            <RowFlex>
+              Coinbase Wallet <img src={require('./assets/images/coinbase.png')} alt="Coinbase" />
+            </RowFlex>
+          </ButtonWithBg>
         </Modal>
       )}
     </Wrapper>
@@ -502,6 +638,7 @@ const Column = styled.div`
   }
 `;
 
+// CardWra из GitHub (прокрутка, min-width 1024px)
 const CardWra = styled.div`
   width: 100%;
   min-width: 1024px;
@@ -513,7 +650,7 @@ const CardWra = styled.div`
   overflow-x: auto;
   &::-webkit-scrollbar {
     display: none;
-  } 
+  }
 `;
 
 const Cards = styled.div`
@@ -521,7 +658,7 @@ const Cards = styled.div`
   align-items: center;
   justify-content: space-between;
   max-width: 1376px;
-  margin: 30px auto 0;
+  margin: 30px auto 30px;
   gap: 20px;
   min-width: 1024px;
   flex-wrap: nowrap;
@@ -568,11 +705,26 @@ export const RowStaking = styled.div`
   gap: 32px;
   justify-content: center;
   align-items: stretch;
-  height: 700px;
   @media (max-width: 1024px) {
     flex-direction: column-reverse;
     height: auto;
   }
+`;
+export const Socials = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  margin-top: 20px;
+  @media (max-width: 1024px) {
+    flex-direction: row;
+    justify-content: center;
+     gap: 8px;
+  }
+`;
+export const RowStakingQ = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
 `;
 
 export const ColStaking = styled.div`
@@ -595,7 +747,32 @@ export const Block = styled.div`
   flex: 1;
 `;
 
-export  const TextBorder = styled.span`
-    text-shadow: rgb(0,0,0) 3px 0px 0px, rgb(0,0,0) 2.83487px 0.981584px 0px, rgb(0,0,0) 2.35766px 1.85511px 0px, rgb(0,0,0) 1.62091px 2.52441px 0px, rgb(0,0,0) 0.705713px 2.91581px 0px, rgb(0,0,0) -0.287171px 2.98622px 0px, rgb(0,0,0) -1.24844px 2.72789px 0px, rgb(0,0,0) -2.07227px 2.16926px 0px, rgb(0,0,0) -2.66798px 1.37182px 0px, rgb(0,0,0) -2.96998px 0.42336px 0px, rgb(0,0,0) -2.94502px -0.571704px 0px, rgb(0,0,0) -2.59586px -1.50383px 0px, rgb(0,0,0) -1.96093px -2.27041px 0px, rgb(0,0,0) -1.11013px -2.78704px 0px, rgb(0,0,0) -0.137119px -2.99686px 0px, rgb(0,0,0) 0.850987px -2.87677px 0px, rgb(0,0,0) 1.74541px -2.43999px 0px, rgb(0,0,0) 2.44769px -1.73459px 0px, rgb(0,0,0) 2.88051px -0.838247px 0px;
-    `;
+export const TextBorder = styled.span`
+  text-shadow:
+    rgb(0,0,0) 3px 0px 0px,
+    rgb(0,0,0) 2.83487px 0.981584px 0px,
+    rgb(0,0,0) 2.35766px 1.85511px 0px,
+    rgb(0,0,0) 1.62091px 2.52441px 0px,
+    rgb(0,0,0) 0.705713px 2.91581px 0px,
+    rgb(0,0,0) -0.287171px 2.98622px 0px,
+    rgb(0,0,0) -1.24844px 2.72789px 0px,
+    rgb(0,0,0) -2.07227px 2.16926px 0px,
+    rgb(0,0,0) -2.66798px 1.37182px 0px,
+    rgb(0,0,0) -2.96998px 0.42336px 0px,
+    rgb(0,0,0) -2.94502px -0.571704px 0px,
+    rgb(0,0,0) -2.59586px -1.50383px 0px,
+    rgb(0,0,0) -1.96093px -2.27041px 0px,
+    rgb(0,0,0) -1.11013px -2.78704px 0px,
+    rgb(0,0,0) -0.137119px -2.99686px 0px,
+    rgb(0,0,0) 0.850987px -2.87677px 0px,
+    rgb(0,0,0) 1.74541px -2.43999px 0px,
+    rgb(0,0,0) 2.44769px -1.73459px 0px,
+    rgb(0,0,0) 2.88051px -0.838247px 0px;
+`;
 
+const RowFlex = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 8px;
+`;

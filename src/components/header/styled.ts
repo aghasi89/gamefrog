@@ -39,7 +39,9 @@ export const Navigate = styled.div`
     background-color: #ffffff;
     padding: 10px;
     border-radius: 8px;
-    
+      border: 1px solid #000000;
+  box-shadow: 0 2px 2px #000000;
+
     right: 0;
     top: 60px;
   }
@@ -56,7 +58,7 @@ export const NavItem = styled.div.withConfig({
   font-family: var(--font);
   font-size: 20px;
   font-weight: 500;
-  
+  text-align: center;
   & a {
     height: 100%;
     width: 100%;
@@ -64,6 +66,7 @@ export const NavItem = styled.div.withConfig({
     text-decoration: none;
     padding: 7px 24px;
     display: inline-block;
+    text-align: center;
   }
 
   &:active{
@@ -88,8 +91,8 @@ export const NavItem = styled.div.withConfig({
 export const ButtonBay = styled.button`
   padding: 7px 12px;
   border: 1px solid #000000;
-  border-radius: 8px;
   box-shadow: 0 2px 2px #000000;
+  border-radius: 8px;
   background-color: var(--orange);
   font-family: var(--font);
   font-size: 20px;

@@ -85,6 +85,9 @@ const Card = styled.div`
   border: 1px solid #000000;
   background-color: #FECF03;
   padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   @media (max-width: 1024px) {
     padding: 30px 12px;
   }

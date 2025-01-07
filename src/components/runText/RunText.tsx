@@ -11,6 +11,8 @@ const RunningText = styled.div`
     width: 100%;
     font-size: 24px;
     z-index: 10;
+    border: 1px solid black;
+    line-height: 24px;
     &:after {
         content: '';
         display: inline-block;
@@ -33,6 +35,7 @@ const RunningText = styled.div`
     }
         @media (max-width: 1024px) {
         transform: translateY(30px);
+        line-height:24px
 }
 `;
 

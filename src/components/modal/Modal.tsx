@@ -28,7 +28,7 @@ const ModalContent = styled.div`
     gap: 20px;
     border: 1px solid #000  ;
     margin: 0 20px;
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         padding: 24px 16px 16px 16px;
     }
 `;

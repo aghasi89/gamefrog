@@ -244,7 +244,10 @@ const SvgRow = styled.div`
   height: 168px;
   margin: 100px auto 0;
   position: relative;
-  
+    overflow: scroll;
+    &::-webkit-scrollbar {
+        display: none;
+        }
   & svg{
     position: absolute;
     top: 0;

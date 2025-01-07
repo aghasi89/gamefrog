@@ -329,7 +329,6 @@ export const CardVideo = styled.div`
 
 export const CardImgWrap = styled.div`
   width: 100%;
-  border-radius: 24px;
   overflow: hidden;
 
   & img {
