@@ -67,6 +67,8 @@ import animationJson from './assets/video/Text1.json';
 import animationJsonInfoGraphic from './assets/video/Infographics.json';
 import animationJsonInfoGraphicMob from './assets/video/Infographics_mob.json'; // ← Новое из GitHub-версии
 import { Block, ColStaking, RowStaking, RowStakingQ, Socials, TextBorder } from './Staking';
+import {useNavigate} from "react-router-dom";
+import {WhyChoose} from "./components/WhyChoose/WhyChoose";
 
 // Изображения
 const logoText = require('./assets/images/logo_staking.png');
@@ -199,12 +201,14 @@ export function App() {
           >
 
             {/* --- Левая колонка (FAQ/Card) --- */}
-            <FinalCol style={{ marginTop: isDesktop ? '220px' : '508px' }}>
-
+            <FinalCol style={{ marginTop: isDesktop ? '220px' : '508px', position: 'relative' }}>
+              {isDesktop && (
+                <img src={frogImage} style={{ position: "absolute", top: '-215px', left: "calc(50% - 160.5px)", width: "321px"}} />
+              )
+  }
               {/* Добавляем БЛОК ТОЛЬКО ДЛЯ desktop (как в GitHub-версии): */}
               {isDesktop && (
                 <Block style={{ padding: "26px", marginBottom: "20px", position: "relative" }}>
-                  <img src={frogImage} style={{ position: "absolute", top: '-215px', left: "calc(50% - 160.5px)", width: "321px", zIndex: -2 }} />
                   <Text32 color='#FFF' center={true}><TextBorder>$GMF TOKEN</TextBorder></Text32>
                   <Text24 color='#FFF' center={true}><TextBorder>Crypto Presale</TextBorder></Text24>
                   <Border
@@ -325,7 +329,7 @@ export function App() {
             loop
             style={{
               bottom: isDesktop ? (0.857 * width - 744.286) + 'px' : 'none',
-              top: isDesktop ? 'none' : (0.208 * width + 952) + 'px',
+              top: isDesktop ? 'none' : (0.208 * width + 872) + 'px',
               left: isDesktop ? '0' : (0.555 * width - 568.012) + 'px',
             }}
           >
@@ -362,36 +366,39 @@ export function App() {
       </Container>
 
       {/* --- 2-й контейнер --- */}
-      <Container
-        imageUrl={isDesktop ? bgSecond : bgSecondMob}
-        height={isDesktop ? calculateNewHeight(1056, width) : (1010 * width) / 375 - 2}
-        style={{ marginTop: isDesktop ? '0' : '80px', ...(isDesktop ?{height: 'fit-content', paddingBottom:"60px" }:{})}}
-      >
-        <Wrapper2>
-          <SecondTitle
-            style={{
-              justifyContent: 'center',
-              flexDirection: isDesktop ? 'row' : 'column',
-            }}
-          >
-            <span>Why Choose</span>
-            <span>GAMEFROG?</span>
-          </SecondTitle>
-          <Row gap="5px"style={{ marginTop: '50px',  }}  >
-            {isDesktop && <Column direction="column" size={8} sizeSm={12}>
-              {/* Ваш контент/блоки, тексты, иконки и т.д. */}
-              <Text32 color='#FFF' >Features:</Text32>
-              <img src={featuresImage} alt="features" style={{ width: '536px', marginTop: '20px',  }} />
-              <a><img src={moreAboutImage} style={{width:"419px", marginTop: '20px'}} /></a>
-            </Column>}
-            {isDesktop && (
-              <Column alignCenter={true} gap='0' size={4} sizeSm={12}>
-                <Form />
-              </Column>
-            )}
-          </Row>
-        </Wrapper2>
-      </Container>
+      {/*<Container*/}
+      {/*  imageUrl={isDesktop ? bgSecond : bgSecondMob}*/}
+      {/*  height={isDesktop ? calculateNewHeight(1056, width) : (1010 * width) / 375 - 2}*/}
+      {/*  style={{ marginTop: isDesktop ? '0' : '80px', ...(isDesktop ?{height: 'fit-content', paddingBottom:"60px" }:{})}}*/}
+      {/*>*/}
+      {/*  <Wrapper2>*/}
+      {/*    <SecondTitle*/}
+      {/*      style={{*/}
+      {/*        justifyContent: 'center',*/}
+      {/*        flexDirection: isDesktop ? 'row' : 'column',*/}
+      {/*      }}*/}
+      {/*    >*/}
+      {/*      <span>Why Choose</span>*/}
+      {/*      <span>GAMEFROG?</span>*/}
+      {/*    </SecondTitle>*/}
+      {/*    <Row gap="5px"style={{ marginTop: '50px',  }}  >*/}
+      {/*      {isDesktop && <Column direction="column" size={8} sizeSm={12}>*/}
+      {/*        /!* Ваш контент/блоки, тексты, иконки и т.д. *!/*/}
+      {/*        <Text32 color='#FFF' >Features:</Text32>*/}
+      {/*        <img src={featuresImage} alt="features" style={{ width: '536px', marginTop: '20px',  }} />*/}
+      {/*        <a><img src={moreAboutImage} style={{width:"419px", marginTop: '20px'}} /></a>*/}
+      {/*      </Column>}*/}
+      {/*      {isDesktop && (*/}
+      {/*        <Column alignCenter={true} gap='0' size={4} sizeSm={12}>*/}
+      {/*          <Form />*/}
+      {/*        </Column>*/}
+      {/*      )}*/}
+      {/*    </Row>*/}
+      {/*  </Wrapper2>*/}
+      {/*</Container>*/}
+
+      <WhyChoose/>
+
 
       {/* --- 3-й контейнер --- */}
       <Container
@@ -405,7 +412,13 @@ export function App() {
         </SecondTitle>
         <CenterButton top={isDesktop ? 170 : 32}>
           {isDesktop ? (
-            <InfoButton bgColor='#20C954' style={{ textTransform: 'none' }} onClick={() => { }}>
+            <InfoButton bgColor='#20C954'
+                        href='/#presale'
+                        style={{ textTransform: 'none' }}
+                        onClick={() => {
+              console.log('test');
+              //navigate('/#presale')
+            }}>
               Secure Your Tokens Now
               <svg
                 style={{ marginLeft: '10px' }}
@@ -471,7 +484,7 @@ export function App() {
       <Container
         id="community"
         imageUrl={isDesktop ? bgFourth : bgFourthMob}
-        height={isDesktop ? calculateNewHeight(1762, width) : 3.519*width + 296}
+        height={isDesktop ? calculateNewHeight(1762, width) : 3.19*width + 403}
         style={{ backgroundPositionY: isDesktop ? 'top' : 'bottom' }}
       >
         <SecondTitle
@@ -506,7 +519,7 @@ export function App() {
             center={true}
             color="#FFF"
             weight="400"
-            style={{ width: '80%', maxWidth: '705px', margin: '0 auto', letterSpacing: '0.5px' }}
+            style={{ width: '80%', maxWidth: '705px', margin: '0 auto', letterSpacing: '0.5px', fontSize: '4vw' }}
           >
             <MoveText delay={0} duration={1} bgColor="#20C954" amplitude={2} size={12}>
               Gamefrog
@@ -654,7 +667,7 @@ export function App() {
         {/* Новый контент: заголовок, supply и анимации */}
         <>
           <Text48Span color='#FFF' center={true}>
-            Fair distributione
+            Fair distribution
             <Text48Span> for a </Text48Span> Bright
             future
           </Text48Span>

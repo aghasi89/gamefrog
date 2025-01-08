@@ -289,8 +289,9 @@ export const Staking = () => {
         height={isDesktop ? calculateNewHeight(2340, width) : 3636}
         style={
           !isDesktop
-            ? { backgroundPositionY: 'bottom' }
-            : { backgroundPositionY: 'top', height: 'auto' }
+            ? { backgroundPositionY: 'bottom', height: 'auto' }
+            : { backgroundPositionY: 'bottom', height: 'auto' }
+
         }
       >
         <Header />
@@ -335,8 +336,8 @@ export const Staking = () => {
               <span>
                 Welcome to the
                 <br />
-                <div style={{ display: 'flex' }}>
-                  <MoveText delay={0} duration={0.6} bgColor="#20C954" size={isDesktop ? 28 : 16}>
+                <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                  <MoveText delay={0} duration={1.2} bgColor="#20C954" size={isDesktop ? 28 : 16}>
                     Gamefrog
                   </MoveText>
                   <br />
@@ -662,6 +663,7 @@ const Cards = styled.div`
   gap: 20px;
   min-width: 1024px;
   flex-wrap: nowrap;
+  padding: 0 16px;
 `;
 
 const Card = styled.div`

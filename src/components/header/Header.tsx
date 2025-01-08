@@ -36,7 +36,7 @@ export const Header = () => {
           <Logo src={logo} alt={'logo'} />
         </a>
 
-        <ButtonBay onClick={() => { window.location.hash = 'presale'; }}>
+        <ButtonBay onClick={() => { window.location = '/#presale'; }}>
           BUY NOW!
         </ButtonBay>
 
@@ -117,7 +117,7 @@ export const Header = () => {
       style={{
         position: 'sticky',
         top: '10px',
-        zIndex: 200
+        zIndex: 4
       }}
     >
       <HeaderS>
@@ -135,7 +135,7 @@ export const Header = () => {
           ))}
         </Navigate>
 
-        <ButtonBay onClick={() => { window.location.hash = 'presale'; }}>
+        <ButtonBay onClick={() => { window.location = '/#presale'; }}>
           BUY NOW!
         </ButtonBay>
       </HeaderS>

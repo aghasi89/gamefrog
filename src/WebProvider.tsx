@@ -22,6 +22,7 @@ const CHAIN_ID = 11155111; // Sepolia
 
 type WalletType = "METAMASK" | "WALLETCONNECT" | "COINBASE" | null;
 
+// Тип контекста
 type Web3ContextType = {
   walletAddress: string | null;
   provider: BrowserProvider | null;
@@ -33,6 +34,7 @@ type Web3ContextType = {
   connectMetamask: () => Promise<void>;
   connectWalletConnect: () => Promise<void>;
   connectCoinbaseWallet: () => Promise<void>;
+  disconnectWallet: () => void; // <-- метод для дисконнекта
 };
 
 // Создаём контекст
@@ -47,6 +49,7 @@ export const Web3Context = createContext<Web3ContextType>({
   connectMetamask: async () => {},
   connectWalletConnect: async () => {},
   connectCoinbaseWallet: async () => {},
+  disconnectWallet: () => {},
 });
 
 export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -58,19 +61,18 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [stakingContract, setStakingContract] = useState<Contract | null>(null);
   const [tokenContract, setTokenContract] = useState<Contract | null>(null);
 
-  // Храним "последний тип кошелька" в стейте:
+  // Сохраняем "последний тип кошелька" (Metamask/WalletConnect/Coinbase) в стейте:
   const [lastWalletType, setLastWalletType] = useState<WalletType>(null);
 
-  // Ref для WalletConnect, чтобы не пересоздавать при каждом рендере
+  // Ref для WalletConnect
   const wcProviderRef = useRef<any>(null);
 
-  // ==============================
   // 1) Инициализация Infura (read-only)
   useEffect(() => {
     const initInfura = async () => {
       try {
         const infura = new JsonRpcProvider(
-          "https://sepolia.infura.io/v3/f92deb2834c147cc864a0b47ce6ffed3" // ваш Infura
+          "https://sepolia.infura.io/v3/f92deb2834c147cc864a0b47ce6ffed3"
         );
         setInfuraProvider(infura);
       } catch (err) {
@@ -80,8 +82,7 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     initInfura();
   }, []);
 
-  // ==============================
-  // 2) Считываем из localStorage, какой кошелёк использовался последним
+  // 2) Считываем из localStorage, какой кошелёк был последним
   useEffect(() => {
     const savedWallet = localStorage.getItem("LAST_USED_WALLET");
     if (
@@ -93,14 +94,13 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, []);
 
-  // ==============================
-  // 3) Когда мы узнали lastWalletType, пытаемся автоподключиться
+  // 3) Если узнали lastWalletType, пытаемся автоподключиться
   useEffect(() => {
-    if (!lastWalletType) return; // если ничего не сохранено
+    if (!lastWalletType) return;
     autoConnect(lastWalletType);
   }, [lastWalletType]);
 
-  // Функция автоподключения в зависимости от типа
+  // Автоподключение
   const autoConnect = async (type: WalletType) => {
     try {
       if (type === "METAMASK") {
@@ -116,8 +116,7 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  // ==============================
-  // Методы автоподключения (не запрашиваем разрешение, а только проверяем активную сессию)
+  // Методы автоподключения (без запроса eth_requestAccounts)
   const autoConnectMetamask = async () => {
     const ethereum = (window as any).ethereum;
     if (!ethereum) {
@@ -142,11 +141,9 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       optionalMethods: [],
       events: ["chainChanged", "accountsChanged"],
       optionalEvents: [],
-      // Автоподключение => без QR-модалки
-      showQrModal: false,
+      showQrModal: false, // не показываем сразу QR
     });
-    // Попробуем .connect(), если сессия активна — подключимся
-    await wcProviderRef.current.connect(); 
+    await wcProviderRef.current.connect();
     const ethersProvider = new BrowserProvider(wcProviderRef.current as any);
     setProvider(ethersProvider);
 
@@ -164,7 +161,7 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       "https://sepolia.infura.io/v3/f92deb2834c147cc864a0b47ce6ffed3",
       CHAIN_ID
     );
-    // Спросим acc (но без запроса eth_requestAccounts)
+    // Проверим eth_accounts
     const accounts = await coinbaseProvider.request({ method: "eth_accounts" });
     if (accounts && accounts.length > 0) {
       setWalletAddress(accounts[0]);
@@ -174,8 +171,7 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  // ==============================
-  // 4) Методы ручного подключения (когда пользователь вручную жмёт «Connect Wallet»)
+  // Методы ручного подключения
   const connectMetamask = async () => {
     try {
       const ethereum = (window as any).ethereum;
@@ -191,6 +187,7 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
     } catch (err) {
       console.error("Metamask connection error:", err);
+      localStorage.removeItem("LAST_USED_WALLET");
     }
   };
 
@@ -204,8 +201,7 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         optionalMethods: [],
         events: ["chainChanged", "accountsChanged"],
         optionalEvents: [],
-        // Ручное подключение => показываем QR
-        showQrModal: true,
+        showQrModal: true, // показываем QR
       });
       await wcProviderRef.current.connect();
 
@@ -219,6 +215,7 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       localStorage.setItem("LAST_USED_WALLET", "WALLETCONNECT");
     } catch (error) {
       console.error("WalletConnect connection error:", error);
+      localStorage.removeItem("LAST_USED_WALLET");
     }
   };
 
@@ -244,10 +241,24 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       localStorage.setItem("LAST_USED_WALLET", "COINBASE");
     } catch (err) {
       console.error("Coinbase Wallet connection error:", err);
+      localStorage.removeItem("LAST_USED_WALLET");
     }
   };
 
-  // ==============================
+  // Метод "Disconnect Wallet"
+  const disconnectWallet = () => {
+    // 1) Стираем walletAddress из state
+    setWalletAddress(null);
+    // 2) Сбрасываем провайдер
+    setProvider(null);
+    // 3) Удаляем из localStorage тип последнего кошелька
+    localStorage.removeItem("LAST_USED_WALLET");
+    // (Опционально) Сбрасываем контракты
+    // setPresaleContract(null);
+    // setStakingContract(null);
+    // setTokenContract(null);
+  };
+
   // 5) Создаём контракты, когда меняется provider или infuraProvider
   useEffect(() => {
     const setupContracts = async () => {
@@ -260,12 +271,8 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           setTokenContract(new Contract(TOKEN_ADDRESS, tokenAbi, signer));
         } else if (infuraProvider) {
           // Только чтение (read-only)
-          setPresaleContract(
-            new Contract(PRESALE_ADDRESS, presaleAbi, infuraProvider)
-          );
-          setStakingContract(
-            new Contract(STAKING_ADDRESS, stakingAbi, infuraProvider)
-          );
+          setPresaleContract(new Contract(PRESALE_ADDRESS, presaleAbi, infuraProvider));
+          setStakingContract(new Contract(STAKING_ADDRESS, stakingAbi, infuraProvider));
           setTokenContract(new Contract(TOKEN_ADDRESS, tokenAbi, infuraProvider));
         }
       } catch (error) {
@@ -275,7 +282,6 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setupContracts();
   }, [provider, infuraProvider]);
 
-  // ==============================
   return (
     <Web3Context.Provider
       value={{
@@ -289,6 +295,7 @@ export const WebProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         connectMetamask,
         connectWalletConnect,
         connectCoinbaseWallet,
+        disconnectWallet,
       }}
     >
       {children}

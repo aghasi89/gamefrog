@@ -1,0 +1,69 @@
+//========= BREAK POINTS =========//
+@mixin desktop {
+  @media all and (min-width: 1440px) {
+    @content;
+  }
+}
+
+@mixin onlyMobile($displayType: block) {
+  display: $displayType;
+  @content;
+
+  @include desktop() {
+    display: none;
+  }
+}
+
+@mixin onlyDesktop($displayType: block) {
+  display: none;
+
+  @include desktop {
+    display: $displayType;
+    @content;
+  }
+}
+
+//========= FONT =========//
+@mixin Arco {
+  font-family: "arco", sans-serif;
+  font-style: normal;
+}
+
+//========= OTHER =========//
+@mixin container {
+  padding-left: 18px;
+  padding-right: 18px;
+
+  @include desktop {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@mixin inner() {
+  @include desktop() {
+    width: 1376px;
+    margin: 0 auto;
+  }
+}
+
+@mixin centerRow() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin centerColumn() {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin button() {
+  display: block;
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}

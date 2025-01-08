@@ -1,3 +1,4 @@
+// Form.tsx
 import React, { useState, useEffect, useContext } from 'react';
 import {
   parseEther,
@@ -22,22 +23,22 @@ import {
   BoxItem,
   Input,
   InputText,
+  Loader,
 } from './styled';
 import { B, ButtonWithBg, InfoButton, ModalTitle, Text20 } from '../../styled';
 import { Web3Context } from '../../WebProvider';
 import Modal from '../modal/Modal';
 import { Row } from '../../utils';
 
-// ВАЖНО: импортируем ваш хук для ширины экрана
 import { useWindowSize } from '../../hooks';
+import { TextBorder } from '../../Staking';
 
-// Графические ресурсы
 const walletConnect = require('../../assets/images/wallet-connect.png');
 const metaMask = require('../../assets/images/metamask.png');
 const coinbase = require('../../assets/images/coinbase.png');
 const etherIcon = require('../../assets/images/ethereum.png');
 
-// Интерфейс пресейла (для TypeScript)
+// Интерфейсы (если нужны):
 interface IPresaleContract {
   buyTokens(overrides?: TransactionRequest): Promise<TransactionResponse>;
   buyAndStake(overrides?: TransactionRequest): Promise<TransactionResponse>;
@@ -47,18 +48,15 @@ interface IPresaleContract {
   priceFeedAddress(): Promise<string>;
   pendingClaims(address: string): Promise<bigint>;
 }
-
-// Интерфейс стейкинга (для TypeScript) — чтобы получить структуру у пользователя
 interface IStakingContract {
   stakers(address: string): Promise<[bigint, bigint]>;
 }
 
 export const Form = () => {
-  // 1) Проверка размера экрана
   const { width } = useWindowSize();
   const isDesktop = width >= 1024;
 
-  // 2) Достаём необходимые данные и функции из Web3Context
+  // Достаём из контекста всё, включая disconnectWallet
   const {
     walletAddress,
     provider,
@@ -67,86 +65,74 @@ export const Form = () => {
     connectMetamask,
     connectWalletConnect,
     connectCoinbaseWallet,
+    disconnectWallet, // <-- используем
   } = useContext(Web3Context);
 
-  // 3) Состояния
+  // Локальные стейты
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [fundsRaised, setFundsRaised] = useState<bigint | null>(null);
   const [remainingTime, setRemainingTime] = useState<number | null>(null);
   const [currentPriceRaw, setCurrentPriceRaw] = useState<bigint | null>(null);
   const [ethPrice, setEthPrice] = useState<number | null>(null);
 
-  // Сюда пишем сумму купленных (buyTokens) + застейканных (buyAndStake)
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+
   const [userPurchased, setUserPurchased] = useState<number>(0);
 
-  // Поля ввода
   const [ethAmount, setEthAmount] = useState<string>('');
   const [gmfAmount, setGmfAmount] = useState<string>('');
 
-  // Модальное окно для выбора кошелька
   const [showPopup, setShowPopup] = useState<boolean>(false);
 
-  // ================================
-  // 4) Получаем данные из контракта пресейла + стейкинга
+  // ====================== FETCH DATA ============================
   const fetchData = async () => {
     if (!presaleContract || !provider) return;
     try {
       setErrorMsg(null);
 
-      // Приведём presaleContract к IPresaleContract
       const contractRead = presaleContract as unknown as IPresaleContract;
 
-      // Параллельно запрашиваем:
       const [price, raised, endTime] = await Promise.all([
         contractRead.currentPrice(),
         contractRead.fundsRaised(),
         contractRead.endTime(),
       ]);
 
-      // Чтобы получить цену ETH в USD, обращаемся к Chainlink-оракулу через priceFeedAddress
+      // Chainlink oracles
       const priceFeedAddr = await contractRead.priceFeedAddress();
       const priceFeed = new Contract(
         priceFeedAddr,
         [
-          'function latestRoundData() view returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)',
+          'function latestRoundData() view returns (uint80, int256, uint256, uint256, uint80)',
         ],
         provider
       );
       const feedData = await priceFeed.latestRoundData();
       const ethPriceInUsd = Number(feedData[1]) / 1e8;
 
-      // Считаем, сколько осталось до конца пресейла (или ноль, если уже прошёл)
       const now = Math.floor(Date.now() / 1000);
       const timeLeft = Number(endTime) > now ? Number(endTime) - now : 0;
 
-      // Обновляем стейты
       setCurrentPriceRaw(price);
       setFundsRaised(raised);
       setRemainingTime(timeLeft);
       setEthPrice(ethPriceInUsd);
 
-      // --------------------
-      // Считаем, сколько пользователь "купил + застейкал"
-      // Если пользователь залогинен:
+      // Считаем userPurchased
       if (walletAddress) {
-        // 1) Сколько он купил (pendingClaims)
         const pending = await contractRead.pendingClaims(walletAddress);
         const pendingNum = Number(formatUnits(pending, 18));
 
-        // 2) Сколько он застейкал через buyAndStake
-        //    Для этого надо взять stakingContract.stakers(walletAddress).amount
         let totalUser = pendingNum;
         if (stakingContract) {
-          // Приведём stakingContract к IStakingContract
           const stakingRead = stakingContract as unknown as IStakingContract;
           const stakerData = await stakingRead.stakers(walletAddress);
-          // stakerData[0] = amount, stakerData[1] = rewardDebt (см. код контракта)
           const stakedNum = Number(formatUnits(stakerData[0], 18));
-
           totalUser += stakedNum;
         }
 
-        // Округляем до целого
         setUserPurchased(Math.floor(totalUser));
       }
     } catch (error) {
@@ -155,19 +141,15 @@ export const Form = () => {
     }
   };
 
-  // При изменении кошелька/конракта, заново загружаем данные
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddress, presaleContract, stakingContract]);
 
-  // ================================
-  // Утилиты форматирования
+  // ====================== FORMAT UTILS ==========================
   const formatEth = (wei: bigint): string => (Number(wei) / 1e18).toFixed(4);
   const formatUsd = (rawPrice: bigint): string => (Number(rawPrice) / 1e18).toFixed(2);
 
-  // ================================
-  // 5) Методы покупки (buyTokens, buyAndStake)
+  // ====================== BUY / STAKE ===========================
   const handleBuyTokens = async () => {
     if (!ethAmount || Number(ethAmount) <= 0) {
       alert('Enter a valid ETH amount first.');
@@ -186,10 +168,7 @@ export const Form = () => {
       const signer = await provider.getSigner();
       const contractWrite = presaleContract.connect(signer) as unknown as IPresaleContract;
 
-      // Отправляем транзакцию c value = ethAmount (в wei)
-      const tx = await contractWrite.buyTokens({
-        value: parseEther(ethAmount),
-      });
+      const tx = await contractWrite.buyTokens({ value: parseEther(ethAmount) });
       await tx.wait();
 
       alert('Tokens purchased successfully!');
@@ -218,9 +197,7 @@ export const Form = () => {
       const signer = await provider.getSigner();
       const contractWrite = presaleContract.connect(signer) as unknown as IPresaleContract;
 
-      const tx = await contractWrite.buyAndStake({
-        value: parseEther(ethAmount),
-      });
+      const tx = await contractWrite.buyAndStake({ value: parseEther(ethAmount) });
       await tx.wait();
 
       alert('Tokens bought & staked successfully!');
@@ -231,19 +208,14 @@ export const Form = () => {
     }
   };
 
-  // ================================
-  // 6) Расчёт GMF ↔ ETH (при вводе в поля)
+  // ====================== ETH ↔ GMF CONVERSION ==================
   const handleChangeEth = (val: string) => {
-    if (!/^\d*\.?\d*$/.test(val)) return; // Разрешаем только числа с точкой
+    if (!/^\d*\.?\d*$/.test(val)) return;
     setEthAmount(val);
 
     if (Number(val) > 0 && currentPriceRaw && ethPrice) {
-      // Цена 1 токена в USD = currentPriceRaw / 1e18
       const tokenPriceInUsd = Number(currentPriceRaw.toString()) / 1e18;
-      // Цена 1 токена в ETH = (tokenPriceInUsd / ethPrice)
       const tokenPriceInEth = tokenPriceInUsd / ethPrice;
-      // Сколько токенов я получу, если заплачу val ETH:
-      // tokens = (val ETH) / (цена 1 токена в ETH)
       const gmf = Number(val) / tokenPriceInEth;
       setGmfAmount(gmf.toFixed(3));
     } else {
@@ -258,7 +230,6 @@ export const Form = () => {
     if (Number(val) > 0 && currentPriceRaw && ethPrice) {
       const tokenPriceInUsd = Number(currentPriceRaw.toString()) / 1e18;
       const tokenPriceInEth = tokenPriceInUsd / ethPrice;
-      // Если я хочу купить val GMF, то мне нужно eth = val * tokenPriceInEth
       const eth = Number(val) * tokenPriceInEth;
       setEthAmount(eth.toFixed(6));
     } else {
@@ -266,15 +237,8 @@ export const Form = () => {
     }
   };
 
-  // ================================
-  // 7) Countdown
-  const renderer: CountdownRendererFn = ({
-    days,
-    hours,
-    minutes,
-    seconds,
-    completed,
-  }) => {
+  // ====================== COUNTDOWN =============================
+  const renderer: CountdownRendererFn = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
       return <span>Time is up!</span>;
     }
@@ -303,14 +267,12 @@ export const Form = () => {
     );
   };
 
-  // ================================
-  // 8) Открытие/закрытие модалки + кнопки подключения
+  // Открыть попап выбора кошелька
   const handleOpenPopup = () => {
     setShowPopup(true);
   };
 
-  // ================================
-  // Рендер
+  // ====================== RENDER =================================
   return (
     <FormS>
       <FormTitle>Grab it now before the cost goes up!</FormTitle>
@@ -330,13 +292,12 @@ export const Form = () => {
         </>
       ) : (
         <Text16 center={true} style={{ margin: '10px 0 5px' }}>
-          No active countdown. Possibly presale not active or not initialized.
+          No active countdown. Possibly presale not active or ended.
         </Text16>
       )}
 
       <StyledProgress value={0.7} />
 
-      {/* Сколько всего собрали */}
       <TextBox>
         <Text16 center={true}>Funds Raised (ETH):</Text16>
         <Text16 center={true}>{fundsRaised ? formatEth(fundsRaised) : '0'}</Text16>
@@ -350,17 +311,14 @@ export const Form = () => {
         </Text16>
       </TextBox>
 
-      {/* Сколько токенов уже купил (pending + застейкано) */}
       <Text24 style={{ margin: '10px 0' }}>
         You purchased: {userPurchased} GMF
       </Text24>
 
-      {/* Текущая цена */}
       <Text24 style={{ margin: '10px 0 20px' }}>
         Current Price: {currentPriceRaw ? `$${formatUsd(currentPriceRaw)}` : '...'}
       </Text24>
 
-      {/* Кнопка "собрано в ETH" (необязательно) */}
       <InfoButton bgColor='#000'>
         {fundsRaised ? (
           <>
@@ -373,7 +331,7 @@ export const Form = () => {
         )}
       </InfoButton>
 
-      {/* Поля ввода ETH / GMF */}
+      {/* Поля ETH / GMF */}
       <Box>
         <BoxItem>
           <Text16 center={false}>You Pay (ETH)</Text16>
@@ -403,7 +361,7 @@ export const Form = () => {
         </BoxItem>
       </Box>
 
-      {/* Если кошелёк НЕ подключен — показываем единственную кнопку "Connect Wallet" */}
+      {/* Если нет кошелька -> Connect Wallet */}
       {!walletAddress ? (
         <InfoButton
           bgColor='#20C954'
@@ -414,8 +372,8 @@ export const Form = () => {
           <B>Connect Wallet</B>
         </InfoButton>
       ) : (
-        // Иначе — показываем кнопки покупки
         <>
+          {/* BUY */}
           <InfoButton
             bgColor='#20C954'
             style={{ textTransform: 'none', marginTop: '20px' }}
@@ -425,6 +383,7 @@ export const Form = () => {
             <B>Buy ({walletAddress.slice(0, 6)}...{walletAddress.slice(-4)})</B>
           </InfoButton>
 
+          {/* BUY & STAKE */}
           <InfoButton
             height={54}
             width={387}
@@ -436,25 +395,31 @@ export const Form = () => {
               <B>Buy & Stake!</B>
             </Text24>
           </InfoButton>
-          
-        </>
-      )}
-<InfoButton
+
+          {/* Disconnect Wallet */}
+          <InfoButton
             bgColor='#CE4242'
             style={{ textTransform: 'none', marginTop: '20px' }}
-            onClick={handleBuyTokens}
+            onClick={() => {
+              // Вызов метода disconnectWallet из контекста
+              disconnectWallet();
+            }}
             color="#000"
           >
             <B>Disconnect Wallet</B>
           </InfoButton>
-      {/* Модальное окно выбора кошелька */}
+        </>
+      )}
+
+      {/* Модалка «Connect Wallet» */}
       {showPopup && (
         <Modal style={{ gap: '16px' }} onClose={() => setShowPopup(false)}>
           <ModalTitle color="#20C954">CONNECT WALLET</ModalTitle>
+          <Text20 center={true}>
+            If you already have a wallet, select your desired wallet from the options below.
+          </Text20>
 
-          <Text20 center={true} >If you already have a wallet, select your desired wallet from the options below.</Text20>
-
-          {/* Metamask — показываем только на десктопе */}
+          {/* Metamask (только на десктопе) */}
           {isDesktop && (
             <ButtonWithBg
               bgColor='#EC801C'
@@ -520,6 +485,7 @@ export const Form = () => {
           </ButtonWithBg>
         </Modal>
       )}
+     {loading &&  <Loader><div><TextBorder>loading...</TextBorder></div></Loader>}
     </FormS>
   );
 };

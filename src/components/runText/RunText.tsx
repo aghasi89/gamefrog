@@ -10,7 +10,7 @@ const RunningText = styled.div`
     padding: 8px 0;
     width: 100%;
     font-size: 24px;
-    z-index: 10;
+    z-index: 3;
     border: 1px solid black;
     line-height: 24px;
     &:after {

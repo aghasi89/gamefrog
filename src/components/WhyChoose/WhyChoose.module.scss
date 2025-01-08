@@ -1,0 +1,225 @@
+@import "../../assets/style/app";
+
+.whyChoose {
+  @include container;
+  width: 100%;
+  background: linear-gradient(180deg, #fe9f8b 0%, #a47cf5 100%);
+  padding-top: 40px;
+  padding-bottom: 40px;
+  overflow: hidden;
+
+  @include desktop {
+    padding-top: 180px;
+    padding-bottom: 192px;
+  }
+
+  .inner {
+    @include inner;
+
+    .title {
+      @include Arco;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 125%;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.7);
+
+      @include desktop {
+        font-size: 48px;
+      }
+
+      span {
+        color: #fff;
+      }
+    }
+
+    .content {
+      position: relative;
+      margin-top: 332px;
+
+      @include desktop {
+        margin-top: 77px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .top {
+        position: relative;
+
+        @include desktop {
+          width: 536px;
+        }
+
+        .label {
+          @include onlyDesktop();
+          margin: 0;
+          position: absolute;
+          left: 0;
+          top: -15px;
+          transform: translateY(-100%);
+          @include Arco;
+          font-weight: 700;
+          font-size: 32px;
+          line-height: 125%;
+          color: #FFF;
+        }
+
+        .items {
+          position: relative;
+
+          .item {
+            border: 1px solid #000;
+            border-radius: 24px;
+            padding: 16px 12px;
+            box-shadow: 0 2px 0 0 #000;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            position: relative;
+
+            @include desktop {
+              padding: 24px;
+            }
+
+            &:not(:first-child) {
+              margin-top: 12px;
+            }
+
+            .icon_main {
+              width: 60px;
+              height: 60px;
+            }
+
+            & > div:nth-child(2) {
+              margin-left: 16px;
+
+              p:nth-child(1) {
+                margin: 0;
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 125%;
+                color: #000;
+
+                @include desktop {
+                  font-size: 24px;
+                }
+              }
+
+              p:nth-child(2) {
+                margin: 4px 0 0;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 125%;
+                color: rgba(0, 0, 0, 0.7);
+              }
+            }
+
+            & > svg {
+              position: absolute;
+            }
+
+            &:nth-child(1), &:nth-child(3) {
+              & > svg {
+                top: 10px;
+                right: 10px;
+              }
+            }
+
+            &:nth-child(2) {
+              & > svg {
+                top: 10px;
+                left: 10px;
+              }
+            }
+
+            &:nth-child(4) {
+              & > svg {
+                bottom: 10px;
+                left: 10px;
+              }
+            }
+
+          }
+        }
+
+      }
+
+      .formWrapper {
+        @include onlyDesktop();
+
+      }
+
+      .frog_mobile {
+       @include onlyMobile();
+        position: absolute;
+        z-index: 2;
+        width: 330px;
+        height: auto;
+        left: 50%;
+        top: 0;
+        transform: translate(-50%, -100%);
+      }
+
+      .frog_desktop {
+        @include onlyDesktop();
+        position: absolute;
+        width: 515px;
+        height: auto;
+        top: -81px;
+        left: 460px;
+      }
+
+      .wall {
+        display: block;
+        position: absolute;
+        z-index: 1;
+        width: 208px;
+        height: auto;
+        top: -365px;
+        left: calc(50% - 120px);
+        transform: translateX(-50%);
+
+        @include desktop {
+          width: 390px;
+          transform: none;
+          left: -80px;
+          top: auto;
+          bottom: -210px;
+        }
+      }
+
+      .icon_left {
+        position: absolute;
+        display: block;
+        width: 90px;
+        height: auto;
+        top: -242px;
+        left: -56px;
+
+        @include desktop {
+          width: 108px;
+          top: -148px;
+          left: -68px;
+        }
+      }
+
+      .icon_right {
+        position: absolute;
+        display: block;
+        width: 78px;
+        height: auto;
+        top: -242px;
+        right: -56px;
+
+        @include desktop {
+          width: 194px;
+          top: -200px;
+          right: -112px;
+        }
+      }
+
+    }
+
+
+  }
+}

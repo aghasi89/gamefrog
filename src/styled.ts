@@ -260,48 +260,49 @@ export const CenterButton = styled.div.withConfig({
   z-index: 3;
 `;
 
-export const InfoButton = styled.div.withConfig({
+export const InfoButton = styled.a.withConfig({
     shouldForwardProp: prop => !['width','height','bgColor'].includes(prop)
 })<{ bgColor: string, width?: number, height?: number }>`
-  width: ${({width}) =>width?width+"px":'100%'};
-  max-width: ${({width}) =>width?"95%":'450px'};
-  height: ${({height}) => height ? height + 'px' : '62px'};
-  padding: 10px 20px;
-  border: 1px solid #000000;
-  box-shadow: 0 2px 2px #000000;
-  background-color: ${({bgColor}) => bgColor};
-  background-repeat: no-repeat;
-  background-size: ${({width}) =>width?"95%":'100%'};
-  background-position: center center;
-  transition: 0.3s;
-  transform: scale(1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 500;
-  font-family: var(--font);
-  color: #ffffff;
-  border-radius: 12px;
-  text-transform: uppercase;
-
-  & svg {
-    margin-right: 10px;
-  }
-
-  &:active {
+    text-decoration: none;
+    width: ${({width}) => width ? width + "px" : '100%'};
+    max-width: ${({width}) => width ? "95%" : '450px'};
+    height: ${({height}) => height ? height + 'px' : '62px'};
+    padding: 10px 20px;
+    border: 1px solid #000000;
+    box-shadow: 0 2px 2px #000000;
+    background-color: ${({bgColor}) => bgColor};
+    background-repeat: no-repeat;
+    background-size: ${({width}) => width ? "95%" : '100%'};
+    background-position: center center;
     transition: 0.3s;
-    transform: scale(0.98);
-    box-shadow: 3px 3px 6px #000000;
-  }
+    transform: scale(1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 500;
+    font-family: var(--font);
+    color: #ffffff;
+    border-radius: 12px;
+    text-transform: uppercase;
 
-  &:hover {
-    cursor: pointer;
-  }
+    & svg {
+        margin-right: 10px;
+    }
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+    &:active {
+        transition: 0.3s;
+        transform: scale(0.98);
+        box-shadow: 3px 3px 6px #000000;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    @media (max-width: 1024px) {
+        font-size: 16px;
+    }
 `;
 
 export const CardRow = styled.div`
@@ -465,7 +466,6 @@ export const FinalRow = styled.div`
   justify-content: space-between;
   gap: 25px;
   position: relative;
-  z-index: 10;
   margin: 0 auto;
 
   @media (max-width: 1024px) {
@@ -708,8 +708,8 @@ export const Border = styled.div.withConfig({
   border: ${({ width }) => width?width:"1"}px solid ${({ color }) => color};
   width: 100%;
   border-radius: ${({raduis})=>raduis?raduis:0}px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 8px;
+  //margin-bottom: 4px;
   height: auto;
   padding: 17px;
 `;

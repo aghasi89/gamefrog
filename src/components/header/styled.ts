@@ -16,7 +16,7 @@ export const HeaderS = styled.header`
   padding: 0 20px;
   position: sticky;
   top: 10px;
-  z-index: 200;
+  z-index: 4;
 `;
 
 export const Logo = styled.img`
@@ -128,8 +128,8 @@ export const HeaderMob = styled.div`
   justify-content: space-between;
   display: flex;
   width: 92%;
-  z-index: 200;
   position: sticky;
+  z-index: 4;
   top: 10px;
   margin: 0 auto;
 `

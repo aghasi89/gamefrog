@@ -9,13 +9,14 @@ export const FormS = styled.div.withConfig({
   background-position: center center;
  // width: 100%;
   max-width: 499px;
-  min-height: 665px;
+  //min-height: 665px;
 
   padding: 20px;
   margin-left: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
   @media(max-width: 1024px){
     margin: 0 auto;
     width: 100%;
@@ -190,3 +191,24 @@ export const InputText = styled.span`
   margin-right: 6px;
   
 `
+export const Loader = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 500;
+  color: #FFF;
+  font-family: var(--font-arco);
+  border-radius: 24px;
+  overflow: hidden;
+`;
