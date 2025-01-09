@@ -10,6 +10,13 @@ import { Collapse } from './components/collapse';
 import { FaqData } from './config';
 import { Calculate } from './components/calculate';
 
+
+import I from './assets/images/i.png';
+import F from './assets/images/f.png';
+import T from './assets/images/t.png';
+import X from './assets/images/xx.png';
+
+
 // Стили и утилиты
 import {
   Btn,
@@ -67,8 +74,8 @@ import animationJson from './assets/video/Text1.json';
 import animationJsonInfoGraphic from './assets/video/Infographics.json';
 import animationJsonInfoGraphicMob from './assets/video/Infographics_mob.json'; // ← Новое из GitHub-версии
 import { Block, ColStaking, RowStaking, RowStakingQ, Socials, TextBorder } from './Staking';
-import {useNavigate} from "react-router-dom";
-import {WhyChoose} from "./components/WhyChoose/WhyChoose";
+import { useNavigate } from "react-router-dom";
+import { WhyChoose } from "./components/WhyChoose/WhyChoose";
 
 // Изображения
 const logoText = require('./assets/images/logo_staking.png');
@@ -111,10 +118,10 @@ const moreAboutImage = require('./assets/images/morea_bout.png');
 const frogImage = require('./assets/images/frog.png');
 const videoAndriod = require('./assets/video/Animation -vp9-chrome.webm');
 const videoIos = require('./assets/video/Animation -hevc-safari.mp4');
-
+const MainAnimation = require('./assets/video/lottielab-json-to-dotlottie.lottie');
 
 function iOS() {
-  
+
   return [
     'iPad Simulator',
     'iPhone Simulator',
@@ -176,7 +183,7 @@ export function App() {
       {/* --- 1-й контейнер --- */}
       <Container
         imageUrl={isDesktop ? bg : bgMob}
-        height={isDesktop ? (2142 * width) / 1440 : undefined}
+        height={isDesktop ? 1.209 * width + 560 : undefined}
         style={{ marginTop: isDesktop ? '-115px' : '-100px', backgroundPosition: 'top center' }}
       >
         {!isDesktop && (
@@ -197,15 +204,16 @@ export function App() {
               marginTop: isDesktop ? '30px' : (0.229 * width + 274.124) + 'px',
               flexDirection: isDesktop ? 'row' : 'column-reverse',
               alignItems: isDesktop ? 'start' : 'center',
+              marginBottom: isDesktop ? '0' : '20px',
             }}
           >
 
             {/* --- Левая колонка (FAQ/Card) --- */}
-            <FinalCol style={{ marginTop: isDesktop ? '220px' : '508px', position: 'relative' }}>
+            <FinalCol style={{ marginTop: isDesktop ? '220px' : '550px', position: 'relative' }}>
               {isDesktop && (
-                <img src={frogImage} style={{ position: "absolute", top: '-215px', left: "calc(50% - 160.5px)", width: "321px"}} />
+                <img src={frogImage} style={{ position: "absolute", top: '-215px', left: "calc(50% - 160.5px)", width: "321px" }} />
               )
-  }
+              }
               {/* Добавляем БЛОК ТОЛЬКО ДЛЯ desktop (как в GitHub-версии): */}
               {isDesktop && (
                 <Block style={{ padding: "26px", marginBottom: "20px", position: "relative" }}>
@@ -318,7 +326,16 @@ export function App() {
               <Form />
             </FinalCol>
           </FinalRow>
-
+          {/* <dotlottie-player
+          id="find-me"
+          autoplay=""
+          controls=""
+          subframe=""
+          loop=""
+          src={MainAnimation}
+          style="width: 320px; margin: auto;"
+        >
+        </dotlottie-player> */}
           {/* Фоновое видео */}
           <Video
             {...videoArg}
@@ -328,8 +345,8 @@ export function App() {
             muted
             loop
             style={{
-              bottom: isDesktop ? (0.857 * width - 744.286) + 'px' : 'none',
-              top: isDesktop ? 'none' : (0.208 * width + 872) + 'px',
+              bottom: isDesktop && (0.857 * width - 744.286) + 'px',
+              top: !isDesktop  && (0.208 * width + 872) + 'px',
               left: isDesktop ? '0' : (0.555 * width - 568.012) + 'px',
             }}
           >
@@ -397,13 +414,13 @@ export function App() {
       {/*  </Wrapper2>*/}
       {/*</Container>*/}
 
-      <WhyChoose/>
+      <WhyChoose />
 
 
       {/* --- 3-й контейнер --- */}
       <Container
         imageUrl={isDesktop ? bgThird : bgThirdMob}
-        style={{ backgroundPositionY: isDesktop ? 'top' : 'bottom' }}
+        style={{ backgroundPositionY: isDesktop ? 'top' : 'bottom', padding:"0 16px" }}
         height={isDesktop ? calculateNewHeight(1413, width) : (1.125 * width + 448)}
       >
         <SecondTitle column={true}>
@@ -413,12 +430,12 @@ export function App() {
         <CenterButton top={isDesktop ? 170 : 32}>
           {isDesktop ? (
             <InfoButton bgColor='#20C954'
-                        href='/#presale'
-                        style={{ textTransform: 'none' }}
-                        onClick={() => {
-              console.log('test');
-              //navigate('/#presale')
-            }}>
+              href='/#presale'
+              style={{ textTransform: 'none' }}
+              onClick={() => {
+                console.log('test');
+                //navigate('/#presale')
+              }}>
               Secure Your Tokens Now
               <svg
                 style={{ marginLeft: '10px' }}
@@ -437,6 +454,7 @@ export function App() {
           ) : (
             <InfoButton
               bgColor='#20C954'
+              href='/#presale'
               width={width * 0.95}
               style={{ color: '#000' }}
               onClick={() => { }}
@@ -484,8 +502,8 @@ export function App() {
       <Container
         id="community"
         imageUrl={isDesktop ? bgFourth : bgFourthMob}
-        height={isDesktop ? calculateNewHeight(1762, width) : 3.19*width + 403}
-        style={{ backgroundPositionY: isDesktop ? 'top' : 'bottom' }}
+        height={isDesktop ? calculateNewHeight(1762, width) : 3.19 * width + 403}
+        style={{ backgroundPositionY: isDesktop ? 'top' : 'bottom', padding:'0 16px' }}
       >
         <SecondTitle
           column={true}
@@ -542,9 +560,11 @@ export function App() {
         imageUrl={isDesktop ? bgFive : bgFiveMob}
         height={isDesktop ? calculateNewHeight(1125, width) : (972 * width) / 375 - 2}
         style={{
+          padding:'0 16px',
           backgroundPositionY: isDesktop ? 'bottom' : 'bottom',
           height: isDesktop ? calculateNewHeight(1125, width) + 'px' : 'fit-content',
           paddingBottom: isDesktop ? '0' : (430 * width) / 375 + 'px',
+          
         }}
       >
         <SecondTitle
@@ -619,7 +639,7 @@ export function App() {
                 <span>hoW To participate</span>
                 <span>in the presale</span>
               </SixTitle>
-              <CardRow style={{...(isDesktop?{}:{justifyContent:"center"})}}>
+              <CardRow style={{ ...(isDesktop ? {} : { justifyContent: "center" }) }}>
                 <CardVideo>
                   {isDesktop ? <Text24>1. Create a crypto wallet</Text24> : <Text20>1. Create a crypto wallet</Text20>}
                   <CardImgWrap>
@@ -659,6 +679,7 @@ export function App() {
         imageUrl={isDesktop ? bgSeven : undefined} // мобилке задаём BG = undefined, а фон через градиент
         height={isDesktop ? calculateNewHeight(922, width) : (880 * width) / 375 - 2}
         style={{
+          padding:'0 16px',
           background: 'linear-gradient(0deg, rgba(173,255,90,1) 0%, rgba(245,166,124,1) 100%)',
           textAlign: 'center',
           marginTop: isDesktop ? '0' : '80px',
@@ -763,7 +784,7 @@ export function App() {
             : {}
         }
       >
-        <Wrapper2 style={{height: 'fit-content', paddingBottom:'80px'}}>
+        <Wrapper2 style={{ height: 'fit-content', paddingBottom: '80px' }}>
           <RowStaking>
             <ColStaking style={{ flex: 1 }}>
               <Block style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -779,55 +800,36 @@ export function App() {
 
                 {/* Заменяем div'ы на <a target="_blank">, как в GitHub-версии */}
                 <Socials>
-              <RowStakingQ >
-                <a href='https://x.com/gamefrogvip/' target='_blank' rel="noreferrer">
-                  <div>
-                    <Btn
-                      style={{
-                        width: isDesktop ? '184px' : '64px',
-                        maxWidth: isDesktop ? '184px' : '64px'
-                      }}
-                      bgImg={isDesktop ? socialXText : socialX}
-                    />
-                  </div>
-                </a>
-                <a href='https://t.me/gamefrogvip/' target='_blank' rel="noreferrer">
-                  <div>
-                    <Btn
-                      style={{
-                        width: isDesktop ? '181px' : '64px',
-                        maxWidth: isDesktop ? '181px' : '64px'
-                      }}
-                      bgImg={isDesktop ? socialTGText : socialTG}
-                    />
-                  </div>
-                </a>
-              </RowStakingQ>
-              <RowStakingQ style={{ height: 'auto', flexDirection: 'row' }}>
-                <a href='https://www.facebook.com/gamefrogofficial' target='_blank' rel="noreferrer">
-                  <div>
-                    <Btn
-                      style={{
-                        width: isDesktop ? '184px' : '64px',
-                        maxWidth: isDesktop ? '184px' : '64px'
-                      }}
-                      bgImg={isDesktop ? socialFBText : socialFB}
-                    />
-                  </div>
-                </a>
-                <a href='https://www.instagram.com/gamefrogvip/' target='_blank' rel="noreferrer">
-                  <div>
-                    <Btn
-                      style={{
-                        width: isDesktop ? '184px' : '64px',
-                        maxWidth: isDesktop ? '184px' : '64px'
-                      }}
-                      bgImg={isDesktop ? socialInstText : socailInst}
-                    />
-                  </div>
-                </a>
-              </RowStakingQ>
-              </Socials>
+                  <RowStakingQ >
+                    <a href='https://x.com/gamefrogvip/' target='_blank' rel="noreferrer">
+                    <ButtonWithBg bgColor='#FFF' style={{ width:isDesktop?"184px":"64px", display: 'flex', gap: "16px", padding: isDesktop?"20px 24px":"16px", fontSize: "24px" }}>
+                        <img width={isDesktop?24:32} src={X} />
+                        {isDesktop && 'Twitter'}
+                      </ButtonWithBg>
+                    </a>
+                    <a href='https://t.me/gamefrogtoken' target='_blank' rel="noreferrer">
+                    <ButtonWithBg bgColor='#FFF' style={{ width:isDesktop?"184px":"64px", display: 'flex', gap: "16px", padding: isDesktop?"20px 24px":"16px", fontSize: "24px" }}>
+                        <img width={isDesktop?24:32} src={T} />
+                        {isDesktop && 'Telegram'}
+                      </ButtonWithBg>
+                    </a>
+                  </RowStakingQ>
+                  <RowStakingQ style={{ height: 'auto', flexDirection: 'row' }}>
+                    <a href='https://www.facebook.com/gamefrogofficial' target='_blank' rel="noreferrer">
+                    <ButtonWithBg bgColor='#FFF' style={{ width:isDesktop?"184px":"64px", display: 'flex', gap: "16px", padding: isDesktop?"20px 24px":"16px", fontSize: "24px" }}>
+                        <img width={isDesktop?24:32} src={F} />
+                        {isDesktop && 'Facebook'}
+                      </ButtonWithBg>
+                    </a>
+                    <a href='https://www.instagram.com/gamefrogvip/' target='_blank' rel="noreferrer">
+                      <ButtonWithBg bgColor='#FFF' style={{ width:isDesktop?"184px":"64px", display: 'flex', gap: "16px", padding: isDesktop?"20px 24px":"16px", fontSize: "24px" }}>
+                        <img width={isDesktop?24:32} src={I} />
+                        {isDesktop && 'Instagram'}
+                      </ButtonWithBg>
+
+                    </a>
+                  </RowStakingQ>
+                </Socials>
               </Block>
             </ColStaking>
 

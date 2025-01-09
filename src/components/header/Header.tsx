@@ -69,7 +69,7 @@ export const Header = () => {
                 </div>
               </a>
               <a
-                href='https://t.me/gamefrogvip/'
+                href='https://t.me/gamefrogtoken'
                 target='_blank'
                 rel='noreferrer'
               >

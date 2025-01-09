@@ -7,7 +7,10 @@ import { Header } from './components/header';
 import { StakeForm } from './components/stakeForm';
 import { Calculate } from './components/calculate';
 import Modal from './components/modal/Modal';
-
+import I from './assets/images/i.png';
+import F from './assets/images/f.png';
+import T from './assets/images/t.png';
+import X from './assets/images/xx.png';
 // Стили
 import {
   Btn,
@@ -366,10 +369,10 @@ export const Staking = () => {
             </Card>
 
             {/* APY */}
-            <Card>
+            {/* <Card>
               <Text16 center={true}>APY</Text16>
               <Text32 center={true}>{apy}</Text32>
-            </Card>
+            </Card> */}
 
             {/* APR */}
             <Card>
@@ -467,55 +470,36 @@ export const Staking = () => {
               <Text48 center={true}>Community</Text48>
               <Text24 center={true}>Stay connected with our global movement:</Text24>
               <Socials>
-              <RowStakingQ >
-                <a href='https://x.com/gamefrogvip/' target='_blank' rel="noreferrer">
-                  <div>
-                    <Btn
-                      style={{
-                        width: isDesktop ? '184px' : '64px',
-                        maxWidth: isDesktop ? '184px' : '64px'
-                      }}
-                      bgImg={isDesktop ? socialXText : socialX}
-                    />
-                  </div>
-                </a>
-                <a href='https://t.me/gamefrogvip/' target='_blank' rel="noreferrer">
-                  <div>
-                    <Btn
-                      style={{
-                        width: isDesktop ? '181px' : '64px',
-                        maxWidth: isDesktop ? '181px' : '64px'
-                      }}
-                      bgImg={isDesktop ? socialTGText : socialTG}
-                    />
-                  </div>
-                </a>
-              </RowStakingQ>
-              <RowStakingQ style={{ height: 'auto', flexDirection: 'row' }}>
-                <a href='https://www.facebook.com/gamefrogofficial' target='_blank' rel="noreferrer">
-                  <div>
-                    <Btn
-                      style={{
-                        width: isDesktop ? '184px' : '64px',
-                        maxWidth: isDesktop ? '184px' : '64px'
-                      }}
-                      bgImg={isDesktop ? socialFBText : socialFB}
-                    />
-                  </div>
-                </a>
-                <a href='https://www.instagram.com/gamefrogvip/' target='_blank' rel="noreferrer">
-                  <div>
-                    <Btn
-                      style={{
-                        width: isDesktop ? '184px' : '64px',
-                        maxWidth: isDesktop ? '184px' : '64px'
-                      }}
-                      bgImg={isDesktop ? socialInstText : socailInst}
-                    />
-                  </div>
-                </a>
-              </RowStakingQ>
-              </Socials>
+                  <RowStakingQ >
+                    <a href='https://x.com/gamefrogvip/' target='_blank' rel="noreferrer">
+                    <ButtonWithBg bgColor='#FFF' style={{ width:isDesktop?"184px":"64px", display: 'flex', gap: "16px", padding: isDesktop?"20px 24px":"16px", fontSize: "24px" }}>
+                        <img width={isDesktop?24:32} src={X} />
+                        {isDesktop && 'Twitter'}
+                      </ButtonWithBg>
+                    </a>
+                    <a href='https://t.me/gamefrogtoken' target='_blank' rel="noreferrer">
+                    <ButtonWithBg bgColor='#FFF' style={{ width:isDesktop?"184px":"64px", display: 'flex', gap: "16px", padding: isDesktop?"20px 24px":"16px", fontSize: "24px" }}>
+                        <img width={isDesktop?24:32} src={T} />
+                        {isDesktop && 'Telegram'}
+                      </ButtonWithBg>
+                    </a>
+                  </RowStakingQ>
+                  <RowStakingQ style={{ height: 'auto', flexDirection: 'row' }}>
+                    <a href='https://www.facebook.com/gamefrogofficial' target='_blank' rel="noreferrer">
+                    <ButtonWithBg bgColor='#FFF' style={{ width:isDesktop?"184px":"64px", display: 'flex', gap: "16px", padding: isDesktop?"20px 24px":"16px", fontSize: "24px" }}>
+                        <img width={isDesktop?24:32} src={F} />
+                        {isDesktop && 'Facebook'}
+                      </ButtonWithBg>
+                    </a>
+                    <a href='https://www.instagram.com/gamefrogvip/' target='_blank' rel="noreferrer">
+                      <ButtonWithBg bgColor='#FFF' style={{ width:isDesktop?"184px":"64px", display: 'flex', gap: "16px", padding: isDesktop?"20px 24px":"16px", fontSize: "24px" }}>
+                        <img width={isDesktop?24:32} src={I} />
+                        {isDesktop && 'Instagram'}
+                      </ButtonWithBg>
+
+                    </a>
+                  </RowStakingQ>
+                </Socials>
             </Block>
           </ColStaking>
 
@@ -660,14 +644,13 @@ const Cards = styled.div`
   justify-content: space-between;
   max-width: 1376px;
   margin: 30px auto 30px;
-  gap: 20px;
-  min-width: 1024px;
+  min-width: 840px;
   flex-wrap: nowrap;
   padding: 0 16px;
 `;
 
 const Card = styled.div`
-  width: 25%;
+  width: 258px;
   height: 134px;
   background-color: #ffffff;
   border-radius: 24px;
@@ -715,7 +698,7 @@ export const RowStaking = styled.div`
 export const Socials = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0px;
+  gap: 8px;
   margin-top: 20px;
   @media (max-width: 1024px) {
     flex-direction: row;

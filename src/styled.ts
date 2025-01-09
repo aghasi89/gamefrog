@@ -552,7 +552,7 @@ export const Btn = styled.button.withConfig({
   height: 66px;
   background-image: url(${({bgImg}) => bgImg});
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   overflow: hidden;
   border: none;
   outline: none;
